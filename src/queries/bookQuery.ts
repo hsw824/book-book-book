@@ -5,7 +5,7 @@ export const bookQueryOption = {
   books: (search: string) =>
     queryOptions({
       queryKey: ["book", search],
-      queryFn: () => fetchBooks(search),
+      queryFn: ({ signal }) => fetchBooks(search, signal),
       enabled: !!search.trim(),
     }),
 };
