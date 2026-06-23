@@ -9,7 +9,6 @@ export async function GET(request: Request) {
   );
 
   const data: KakaoBookResponese = await response.json();
-  const map = new Map();
 
   const books = data.documents.map((book) => ({
     authors: book.authors.join(","),
@@ -20,10 +19,8 @@ export async function GET(request: Request) {
     title: book.title,
     translators: book.translators.join(","),
     url: book.url,
-    isbn: book.isbn.split(" ")[1],
+    isbn: book.isbn,
   }));
 
-  books.forEach((book) => map.set(book.isbn, book));
-
-  return Response.json([...map.values()]);
+  return Response.json(books);
 }
