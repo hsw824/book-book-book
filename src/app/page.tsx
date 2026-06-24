@@ -1,3 +1,5 @@
+import { AutoCompleteInput } from "@/components/AutoCompleteInput";
+
 export default function Home() {
-  return <div>init</div>;
+  return <AutoCompleteInput />;
 }
