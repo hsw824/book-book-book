@@ -1,5 +1,13 @@
 "use client";
 
+// TODO: 테일윈드 조금 더 정리해보기
+// TODO: 컴포넌트 정리
+// TODO: next img 컴포넌트 써보기
+// TODO: infinite use query
+// FIXME: 키보드 입력때 e.preventDefault 오류 수정
+// FIXME: 책 리스트 나오는거 어떻게 나오는지 클릭시 나오면 안되고 좀 어떻게 해야할지 고민
+// FIXME: 키보드 이벤트 할 때 스크롤도 내려가게(구글도 없기는한디)
+
 import { useSearchDebounce } from "@/hooks/useDebounce";
 import { Book } from "@/models/bookTypes";
 import { bookQueryOption } from "@/queries/bookQuery";
@@ -127,7 +135,7 @@ function BookList({
       <div
         className={`${isShow ? "h-150" : "h-25"} flex flex-col justify-center items-center`}
       >
-        <span className="mb-2 text-[15px] font-semibold color: text-[rgb(95,99,104)]">
+        <span className="mb-2 text-[15px] font-semibold text-[rgb(95,99,104)]">
           어떤 책을 기록할까요?
         </span>
         <span className="text-[13px] text-[rgb(154,160,166)]">
@@ -142,7 +150,7 @@ function BookList({
       <div
         className={`${isShow ? "h-150" : "h-25"} flex flex-col justify-center items-center`}
       >
-        <span className="mb-2 text-[15px] font-semibold color: text-[rgb(95,99,104)]">
+        <span className="mb-2 text-[15px] font-semibold text-[rgb(95,99,104)]">
           검색 결과가 없어요.
         </span>
         <span className="text-[13px] text-[rgb(154,160,166)] text-center">
@@ -172,7 +180,7 @@ function BookList({
                 alt="책 사진"
               />
               <div className="flex flex-col justify-start">
-                <span className="text-[15px] font-medium color: text-[rgb(32,33,36)]">
+                <span className="text-[15px] font-medium text-[rgb(32,33,36)]">
                   {book.title}
                 </span>
                 <span className="text-[13px]/[1.3] text-[rgb(95,99,104)] mt-0.75">
