@@ -148,6 +148,21 @@ function BookList({
   if (books.length === 0 && search.length !== 0) {
     return (
       <div className="h-150 flex flex-col justify-center items-center">
+        <span className="text-[rgb(154,160,166)] opacity-80 mb-1">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+          </svg>
+        </span>
+
         <span className="mb-2 text-[15px] font-semibold text-[rgb(95,99,104)]">
           검색 결과가 없어요.
         </span>
