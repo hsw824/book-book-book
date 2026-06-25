@@ -8,23 +8,32 @@ import { isNull } from "es-toolkit";
 import { useState } from "react";
 
 export function AutoCompleteInput() {
-  const [search, setSearch] = useState("데미안");
+  const [search, setSearch] = useState("정유정");
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
+  const [isShow, setIsShow] = useState(false);
 
   const debouncedSearch = useSearchDebounce(search, 400);
 
   const { data: books } = useQuery(bookQueryOption.books(debouncedSearch));
 
   return (
-    <>
+    <div className="w-105 bg-[rgb(255,255,255)] rounded-[18px] border border-solid border-[rgb(227,229,232)] p-3.5 my-0 mx-auto">
       <SearchBookInput
         search={search}
         setSearch={setSearch}
         setSelectedIndex={setSelectedIndex}
         totalBookLength={!books ? 0 : books.length}
+        setIsShow={setIsShow}
       />
-      <BookList books={books} selectedIndex={selectedIndex} />
-    </>
+      {isShow && (
+        <BookList
+          books={books}
+          selectedIndex={selectedIndex}
+          isShow={isShow}
+          search={search}
+        />
+      )}
+    </div>
   );
 }
 
@@ -33,11 +42,13 @@ function SearchBookInput({
   setSearch,
   setSelectedIndex,
   totalBookLength,
+  setIsShow,
 }: {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   setSelectedIndex: React.Dispatch<React.SetStateAction<null | number>>;
   totalBookLength: number;
+  setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const handleChangeInput = (
     e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
@@ -48,7 +59,7 @@ function SearchBookInput({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // TODO: enter(form 적용)와 esc(검색창 제거) 처리
-    e.preventDefault();
+    // e.preventDefault();
 
     if (e.key === "ArrowDown") {
       setSelectedIndex((prev) => {
@@ -64,40 +75,114 @@ function SearchBookInput({
     }
   };
 
+  const handleClick = () => {
+    setIsShow((prev) => !prev);
+  };
+
   return (
-    <input
-      type="text"
-      className="border"
-      value={search}
-      onChange={handleChangeInput}
-      onKeyDown={handleKeyDown}
-    />
+    <div className="bg-[rgb(255,255,255)] flex items-center gap-2.5 h-11 py-0 px-3 rounded-xl border border-solid border-[rgb(218,211,225)] shadow-none">
+      <span className="grow-0 shrink-0 basis-auto text-[rgb(154,160,166)]">
+        <svg
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+        </svg>
+      </span>
+      <input
+        placeholder="제목, 저자 검색"
+        type="text"
+        className="grow shrink basis-[0%] outline-none text-[15px] text-[rgb(32,33,36)]"
+        value={search}
+        onChange={handleChangeInput}
+        onKeyDown={handleKeyDown}
+        onClick={handleClick}
+      />
+      <button className="w-5.5 h-5.5 bg-[rgb(240,240,242)] border-none text-[rgb(95,99,104)] cursor-pointer text-[11px] rounded-[11px]">
+        x
+      </button>
+    </div>
   );
 }
 
 function BookList({
   books,
   selectedIndex,
+  isShow,
+  search,
 }: {
   books: Book[] | undefined;
   selectedIndex: null | number;
+  isShow: boolean;
+  search: string;
 }) {
-  if (!books || books.length === 0) {
-    return <div>결과가 없습니다.</div>;
+  if (!books) {
+    return (
+      <div
+        className={`${isShow ? "h-150" : "h-25"} flex flex-col justify-center items-center`}
+      >
+        <span className="mb-2 text-[15px] font-semibold color: text-[rgb(95,99,104)]">
+          어떤 책을 기록할까요?
+        </span>
+        <span className="text-[13px] text-[rgb(154,160,166)]">
+          읽은 책의 제목이나 저자를 입력해 보세요.
+        </span>
+      </div>
+    );
+  }
+
+  if (books.length === 0 && search.length !== 0) {
+    return (
+      <div
+        className={`${isShow ? "h-150" : "h-25"} flex flex-col justify-center items-center`}
+      >
+        <span className="mb-2 text-[15px] font-semibold color: text-[rgb(95,99,104)]">
+          검색 결과가 없어요.
+        </span>
+        <span className="text-[13px] text-[rgb(154,160,166)] text-center">
+          &apos;{search}&apos;(으)로 찾은 책이 없어요.
+          <br /> 다른 제목이나 저자로 검색해 보세요.
+        </span>
+      </div>
+    );
   }
 
   return (
-    <div className="bg-blue-950">
+    <div
+      className={`${isShow ? "h-150" : "h-25"} overflow-scroll origin-top animate-[dropSpring_0.34s_cubic-bezier(0.34,1.42,0.5,1)] mt-3.5 -mx-3.5`}
+    >
       {books.map((book, index) => {
         const isSelected = selectedIndex === index;
 
         return (
-          <div key={book.isbn} className={isSelected ? "bg-amber-500" : ""}>
-            <span>{book.title}</span>
-            <span>{book.authors}</span>
-            <span>{book.publisher}</span>
-
-            <img src={book.thumbnail} alt="책 사진" />
+          <div
+            key={book.isbn}
+            className={`${isSelected ? "bg-[rgb(238,244,253)] shadow-[inset_2px_0_0_rgb(47,107,220)]" : ""} border-t border-solid border-[rgb(240,240,242)]`}
+          >
+            <div className="flex py-3 px-4 gap-3">
+              <img
+                className="w-[46px] h-[64px] rounded-[3px]"
+                src={book.thumbnail}
+                alt="책 사진"
+              />
+              <div className="flex flex-col justify-start">
+                <span className="text-[15px] font-medium color: text-[rgb(32,33,36)]">
+                  {book.title}
+                </span>
+                <span className="text-[13px]/[1.3] text-[rgb(95,99,104)] mt-0.75">
+                  {book.authors}
+                </span>
+                <span className="text-[13px]/[1.3] text-[rgb(154,160,166)] mt-0.5">
+                  {book.publisher}
+                </span>
+              </div>
+            </div>
           </div>
         );
       })}
