@@ -147,9 +147,7 @@ function BookList({
 
   if (books.length === 0 && search.length !== 0) {
     return (
-      <div
-        className={`${isShow ? "h-150" : "h-25"} flex flex-col justify-center items-center`}
-      >
+      <div className="h-150 flex flex-col justify-center items-center">
         <span className="mb-2 text-[15px] font-semibold text-[rgb(95,99,104)]">
           검색 결과가 없어요.
         </span>
