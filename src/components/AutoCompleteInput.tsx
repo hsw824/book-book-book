@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 // TODO: 테일윈드 조금 더 정리해보기
 // TODO: 컴포넌트 정리(toss lib참고)
@@ -8,15 +8,15 @@
 // FIXME: 책 리스트 나오는거 어떻게 나오는지 클릭시 나오면 안되고 좀 어떻게 해야할지 고민(인풋을 클릭할 때 나오게 했는데 그런 방식 말고 다른 방식을 찾아야할듯)
 // FIXME: 키보드 이벤트 할 때 스크롤도 내려가게(구글도 없기는한디)
 
-import { useSearchDebounce } from "@/hooks/useDebounce";
-import { Book } from "@/models/bookTypes";
-import { bookQueryOption } from "@/queries/bookQuery";
-import { useQuery } from "@tanstack/react-query";
-import { isNull } from "es-toolkit";
-import { useState } from "react";
+import { useSearchDebounce } from '@/hooks/useDebounce';
+import { Book } from '@/models/bookTypes';
+import { bookQueryOption } from '@/queries/bookQuery';
+import { useQuery } from '@tanstack/react-query';
+import { isNull } from 'es-toolkit';
+import { useState } from 'react';
 
 export function AutoCompleteInput() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
   const [isShow, setIsShow] = useState(false);
 
@@ -25,7 +25,7 @@ export function AutoCompleteInput() {
   const { data: books } = useQuery(bookQueryOption.books(debouncedSearch));
 
   return (
-    <div className="w-105 rounded-[18px] border border-solid border-zinc-200 p-3.5 my-0 mx-auto">
+    <div className="mx-auto my-0 w-105 rounded-[18px] border border-solid border-zinc-200 p-3.5">
       <SearchBookInput
         search={search}
         setSearch={setSearch}
@@ -33,14 +33,7 @@ export function AutoCompleteInput() {
         totalBookLength={!books ? 0 : books.length}
         setIsShow={setIsShow}
       />
-      {isShow && (
-        <BookList
-          books={books}
-          selectedIndex={selectedIndex}
-          isShow={isShow}
-          search={search}
-        />
-      )}
+      {isShow && <BookList books={books} selectedIndex={selectedIndex} isShow={isShow} search={search} />}
     </div>
   );
 }
@@ -58,9 +51,7 @@ function SearchBookInput({
   totalBookLength: number;
   setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const handleChangeInput = (
-    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
-  ) => {
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
     setSelectedIndex(null);
     setSearch(e.target.value);
   };
@@ -69,14 +60,14 @@ function SearchBookInput({
     // TODO: enter(form 적용)와 esc(검색창 제거) 처리
     // e.preventDefault();
 
-    if (e.key === "ArrowDown") {
-      setSelectedIndex((prev) => {
+    if (e.key === 'ArrowDown') {
+      setSelectedIndex(prev => {
         if (isNull(prev) || prev === totalBookLength - 1) return 0;
         return prev + 1;
       });
     }
-    if (e.key === "ArrowUp") {
-      setSelectedIndex((prev) => {
+    if (e.key === 'ArrowUp') {
+      setSelectedIndex(prev => {
         if (isNull(prev) || prev === 0) return totalBookLength - 1;
         return prev - 1;
       });
@@ -84,12 +75,12 @@ function SearchBookInput({
   };
 
   const handleClick = () => {
-    setIsShow((prev) => !prev);
+    setIsShow(prev => !prev);
   };
 
   return (
-    <div className="flex items-center gap-2.5 h-11 py-0 px-3 rounded-xl border border-solid border-zinc-300 shadow-none">
-      <span className="grow-0 shrink-0 basis-auto text-zinc-400">
+    <div className="flex h-11 items-center gap-2.5 rounded-xl border border-solid border-zinc-300 px-3 py-0 shadow-none">
+      <span className="shrink-0 grow-0 basis-auto text-zinc-400">
         <svg
           width="17"
           height="17"
@@ -106,13 +97,13 @@ function SearchBookInput({
       <input
         placeholder="제목, 저자 검색"
         type="text"
-        className="grow shrink basis-[0%] outline-none text-[15px] text-neutral-800"
+        className="shrink grow basis-[0%] text-[15px] text-neutral-800 outline-none"
         value={search}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDown}
         onClick={handleClick}
       />
-      <button className="w-5.5 h-5.5 bg-gray-100 border-none text-gray-600 cursor-pointer text-[11px] rounded-[11px]">
+      <button className="h-5.5 w-5.5 cursor-pointer rounded-[11px] border-none bg-gray-100 text-[11px] text-gray-600">
         x
       </button>
     </div>
@@ -132,23 +123,17 @@ function BookList({
 }) {
   if (!books) {
     return (
-      <div
-        className={`${isShow ? "h-150" : "h-25"} flex flex-col justify-center items-center`}
-      >
-        <span className="mb-2 text-[15px] font-semibold text-gray-600">
-          어떤 책을 기록할까요?
-        </span>
-        <span className="text-[13px] text-zinc-400">
-          읽은 책의 제목이나 저자를 입력해 보세요.
-        </span>
+      <div className={`${isShow ? 'h-150' : 'h-25'} flex flex-col items-center justify-center`}>
+        <span className="mb-2 text-[15px] font-semibold text-gray-600">어떤 책을 기록할까요?</span>
+        <span className="text-[13px] text-zinc-400">읽은 책의 제목이나 저자를 입력해 보세요.</span>
       </div>
     );
   }
 
   if (books.length === 0 && search.length !== 0) {
     return (
-      <div className="h-150 flex flex-col justify-center items-center">
-        <span className="text-zinc-400 opacity-80 mb-1">
+      <div className="flex h-150 flex-col items-center justify-center">
+        <span className="mb-1 text-zinc-400 opacity-80">
           <svg
             width="32"
             height="32"
@@ -163,10 +148,8 @@ function BookList({
           </svg>
         </span>
 
-        <span className="mb-2 text-[15px] font-semibold text-gray-600">
-          검색 결과가 없어요.
-        </span>
-        <span className="text-[13px] text-zinc-400 text-center">
+        <span className="mb-2 text-[15px] font-semibold text-gray-600">검색 결과가 없어요.</span>
+        <span className="text-center text-[13px] text-zinc-400">
           &apos;{search}&apos;(으)로 찾은 책이 없어요.
           <br /> 다른 제목이나 저자로 검색해 보세요.
         </span>
@@ -176,7 +159,7 @@ function BookList({
 
   return (
     <div
-      className={`${isShow ? "h-150" : "h-25"} overflow-y-scroll origin-top animate-[dropSpring_0.34s_cubic-bezier(0.34,1.42,0.5,1)] mt-3.5 -mx-3.5`}
+      className={`${isShow ? 'h-150' : 'h-25'} -mx-3.5 mt-3.5 origin-top animate-[dropSpring_0.34s_cubic-bezier(0.34,1.42,0.5,1)] overflow-y-scroll`}
     >
       {books.map((book, index) => {
         const isSelected = selectedIndex === index;
@@ -184,24 +167,14 @@ function BookList({
         return (
           <div
             key={book.isbn}
-            className={`${isSelected ? "bg-indigo-50 shadow-[inset_2px_0_0_var(--color-blue-600)]" : ""} border-t border-solid border-gray-100`}
+            className={`${isSelected ? 'bg-indigo-50 shadow-[inset_2px_0_0_var(--color-blue-600)]' : ''} border-t border-solid border-gray-100`}
           >
-            <div className="flex py-3 px-4 gap-3 cursor-pointer">
-              <img
-                className="w-[46px] h-[64px] rounded-[3px]"
-                src={book.thumbnail}
-                alt="책 사진"
-              />
-              <div className="flex flex-col justify-start ">
-                <span className="text-[15px] font-medium text-neutral-800">
-                  {book.title}
-                </span>
-                <span className="text-[13px]/[1.3] text-gray-600 mt-0.75">
-                  {book.authors}
-                </span>
-                <span className="text-[13px]/[1.3] text-zinc-400 mt-0.5">
-                  {book.publisher}
-                </span>
+            <div className="flex cursor-pointer gap-3 px-4 py-3">
+              <img className="h-[64px] w-[46px] rounded-[3px]" src={book.thumbnail} alt="책 사진" />
+              <div className="flex flex-col justify-start">
+                <span className="text-[15px] font-medium text-neutral-800">{book.title}</span>
+                <span className="mt-0.75 text-[13px]/[1.3] text-gray-600">{book.authors}</span>
+                <span className="mt-0.5 text-[13px]/[1.3] text-zinc-400">{book.publisher}</span>
               </div>
             </div>
           </div>
