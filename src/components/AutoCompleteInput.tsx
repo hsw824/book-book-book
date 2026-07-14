@@ -22,6 +22,16 @@ export function AutoCompleteInput() {
 
   const { data: books } = useQuery(bookQueryOption.books(debouncedSearch));
 
+  const handleFocus = () => {
+    setIsFocus(true);
+    setSelectedIndex(null);
+  };
+
+  const handleBlur = () => {
+    setIsFocus(false);
+    setSelectedIndex(null);
+  };
+
   return (
     <div className="mx-auto my-0 w-105 rounded-[18px] border border-solid border-zinc-200 p-3.5">
       <SearchBookInput
@@ -29,8 +39,8 @@ export function AutoCompleteInput() {
         setSearch={setSearch}
         setSelectedIndex={setSelectedIndex}
         totalBookLength={!books ? 0 : books.length}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
       {isFocus && <BookList books={books} selectedIndex={selectedIndex} isFocus={isFocus} search={search} />}
     </div>
@@ -59,8 +69,6 @@ function SearchBookInput({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // TODO: enter(form 적용)와 esc(검색창 제거) 처리
-    // e.preventDefault();
-
     if (e.key === 'ArrowDown') {
       setSelectedIndex(prev => {
         if (isNull(prev) || prev === totalBookLength - 1) return 0;
