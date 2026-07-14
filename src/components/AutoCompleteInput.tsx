@@ -1,7 +1,5 @@
 'use client';
 
-// TODO: 테일윈드 조금 더 정리해보기
-// TODO: 컴포넌트 정리(toss lib참고)
 // TODO: next img 컴포넌트 써보기
 // TODO: infinite use query
 // FIXME: 키보드 입력때 e.preventDefault 오류 수정
@@ -18,7 +16,6 @@ import { useState } from 'react';
 export function AutoCompleteInput() {
   const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
-  // isOpen이 더 나은듯
   const [isFocus, setIsFocus] = useState(false);
 
   const debouncedSearch = useSearchDebounce(search, 400);
