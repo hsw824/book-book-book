@@ -1,6 +1,5 @@
 'use client';
 
-// TODO: next img 컴포넌트 써보기
 // TODO: infinite use query
 // FIXME: 키보드 이벤트 할 때 스크롤도 내려가게(구글도 없기는한디)
 // FIXME: 변수명도 다시 생각하고
@@ -11,6 +10,7 @@ import { bookQueryOption } from '@/queries/bookQuery';
 import { useQuery } from '@tanstack/react-query';
 import { isNull } from 'es-toolkit';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export function AutoCompleteInput() {
   const [search, setSearch] = useState('');
@@ -177,7 +177,7 @@ function BookList({
             className={`${isSelected ? 'bg-indigo-50 shadow-[inset_2px_0_0_var(--color-blue-600)]' : ''} border-t border-solid border-gray-100`}
           >
             <div className="flex cursor-pointer gap-3 px-4 py-3">
-              <img className="h-[64px] w-[46px] rounded-[3px]" src={book.thumbnail} alt="책 사진" />
+              <Image src={book.thumbnail} alt="책 사진" width={46} height={64} className="rounded-[3px]" />
               <div className="flex flex-col justify-start">
                 <span className="text-[15px] font-medium text-neutral-800">{book.title}</span>
                 <span className="mt-0.75 text-[13px]/[1.3] text-gray-600">{book.authors}</span>
