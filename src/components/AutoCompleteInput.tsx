@@ -5,8 +5,8 @@
 // TODO: next img 컴포넌트 써보기
 // TODO: infinite use query
 // FIXME: 키보드 입력때 e.preventDefault 오류 수정
-// FIXME: 책 리스트 나오는거 어떻게 나오는지 클릭시 나오면 안되고 좀 어떻게 해야할지 고민(인풋을 클릭할 때 나오게 했는데 그런 방식 말고 다른 방식을 찾아야할듯)
 // FIXME: 키보드 이벤트 할 때 스크롤도 내려가게(구글도 없기는한디)
+// FIXME: 변수명도 다시 생각하고
 
 import { useSearchDebounce } from '@/hooks/useDebounce';
 import { Book } from '@/models/bookTypes';
@@ -18,7 +18,8 @@ import { useState } from 'react';
 export function AutoCompleteInput() {
   const [search, setSearch] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
-  const [isShow, setIsShow] = useState(false);
+  // isOpen이 더 나은듯
+  const [isFocus, setIsFocus] = useState(false);
 
   const debouncedSearch = useSearchDebounce(search, 400);
 
@@ -31,9 +32,10 @@ export function AutoCompleteInput() {
         setSearch={setSearch}
         setSelectedIndex={setSelectedIndex}
         totalBookLength={!books ? 0 : books.length}
-        setIsShow={setIsShow}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
       />
-      {isShow && <BookList books={books} selectedIndex={selectedIndex} isShow={isShow} search={search} />}
+      {isFocus && <BookList books={books} selectedIndex={selectedIndex} isFocus={isFocus} search={search} />}
     </div>
   );
 }
@@ -43,13 +45,15 @@ function SearchBookInput({
   setSearch,
   setSelectedIndex,
   totalBookLength,
-  setIsShow,
+  onFocus,
+  onBlur,
 }: {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   setSelectedIndex: React.Dispatch<React.SetStateAction<null | number>>;
   totalBookLength: number;
-  setIsShow: React.Dispatch<React.SetStateAction<boolean>>;
+  onFocus: () => void;
+  onBlur: () => void;
 }) {
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
     setSelectedIndex(null);
@@ -72,10 +76,6 @@ function SearchBookInput({
         return prev - 1;
       });
     }
-  };
-
-  const handleClick = () => {
-    setIsShow(prev => !prev);
   };
 
   return (
@@ -101,7 +101,8 @@ function SearchBookInput({
         value={search}
         onChange={handleChangeInput}
         onKeyDown={handleKeyDown}
-        onClick={handleClick}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
       <button className="h-5.5 w-5.5 cursor-pointer rounded-[11px] border-none bg-gray-100 text-[11px] text-gray-600">
         x
@@ -113,17 +114,17 @@ function SearchBookInput({
 function BookList({
   books,
   selectedIndex,
-  isShow,
+  isFocus,
   search,
 }: {
   books: Book[] | undefined;
   selectedIndex: null | number;
-  isShow: boolean;
+  isFocus: boolean;
   search: string;
 }) {
   if (!books) {
     return (
-      <div className={`${isShow ? 'h-150' : 'h-25'} flex flex-col items-center justify-center`}>
+      <div className={`${isFocus ? 'h-150' : 'h-25'} flex flex-col items-center justify-center`}>
         <span className="mb-2 text-[15px] font-semibold text-gray-600">어떤 책을 기록할까요?</span>
         <span className="text-[13px] text-zinc-400">읽은 책의 제목이나 저자를 입력해 보세요.</span>
       </div>
@@ -159,7 +160,7 @@ function BookList({
 
   return (
     <div
-      className={`${isShow ? 'h-150' : 'h-25'} -mx-3.5 mt-3.5 origin-top animate-[dropSpring_0.34s_cubic-bezier(0.34,1.42,0.5,1)] overflow-y-scroll`}
+      className={`${isFocus ? 'h-150' : 'h-25'} -mx-3.5 mt-3.5 origin-top animate-[dropSpring_0.34s_cubic-bezier(0.34,1.42,0.5,1)] overflow-y-scroll`}
     >
       {books.map((book, index) => {
         const isSelected = selectedIndex === index;
