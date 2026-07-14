@@ -2,7 +2,8 @@
 
 // TODO: infinite use query
 // FIXME: 키보드 이벤트 할 때 스크롤도 내려가게(구글도 없기는한디)
-// FIXME: 변수명도 다시 생각하고
+// TODO: zustand 고려
+// TODO: 컴포넌트 분리 / compound component 고려
 
 import { useSearchDebounce } from '@/hooks/useDebounce';
 import { Book } from '@/models/bookTypes';
@@ -13,57 +14,59 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 export function AutoCompleteInput() {
-  const [search, setSearch] = useState('');
+  const [keyword, setKeyword] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
-  const [isFocus, setIsFocus] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
-  const debouncedSearch = useSearchDebounce(search, 400);
+  const debouncedKeyword = useSearchDebounce(keyword, 400);
 
-  const { data: books } = useQuery(bookQueryOption.books(debouncedSearch));
+  const { data: books } = useQuery(bookQueryOption.books(debouncedKeyword));
 
   const handleFocus = () => {
-    setIsFocus(true);
+    setIsFocused(true);
     setSelectedIndex(null);
   };
 
   const handleBlur = () => {
-    setIsFocus(false);
+    setIsFocused(false);
     setSelectedIndex(null);
   };
 
   return (
     <div className="mx-auto my-0 w-105 rounded-[18px] border border-solid border-zinc-200 p-3.5">
-      <SearchBookInput
-        search={search}
-        setSearch={setSearch}
+      <BookSearchInput
+        keyword={keyword}
+        setKeyword={setKeyword}
         setSelectedIndex={setSelectedIndex}
-        totalBookLength={!books ? 0 : books.length}
+        bookCount={!books ? 0 : books.length}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      {isFocus && <BookList books={books} selectedIndex={selectedIndex} isFocus={isFocus} search={search} />}
+      {isFocused && (
+        <BookSearchResult books={books} selectedIndex={selectedIndex} isFocused={isFocused} keyword={keyword} />
+      )}
     </div>
   );
 }
 
-function SearchBookInput({
-  search,
-  setSearch,
+function BookSearchInput({
+  keyword,
+  setKeyword,
   setSelectedIndex,
-  totalBookLength,
+  bookCount,
   onFocus,
   onBlur,
 }: {
-  search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  keyword: string;
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
   setSelectedIndex: React.Dispatch<React.SetStateAction<null | number>>;
-  totalBookLength: number;
+  bookCount: number;
   onFocus: () => void;
   onBlur: () => void;
 }) {
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
     setSelectedIndex(null);
-    setSearch(e.target.value);
+    setKeyword(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -71,14 +74,14 @@ function SearchBookInput({
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       setSelectedIndex(prev => {
-        if (isNull(prev) || prev === totalBookLength - 1) return 0;
+        if (isNull(prev) || prev === bookCount - 1) return 0;
         return prev + 1;
       });
     }
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       setSelectedIndex(prev => {
-        if (isNull(prev) || prev === 0) return totalBookLength - 1;
+        if (isNull(prev) || prev === 0) return bookCount - 1;
         return prev - 1;
       });
     }
@@ -104,8 +107,8 @@ function SearchBookInput({
         placeholder="제목, 저자 검색"
         type="text"
         className="shrink grow basis-[0%] text-[15px] text-neutral-800 outline-none"
-        value={search}
-        onChange={handleChangeInput}
+        value={keyword}
+        onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         onFocus={onFocus}
         onBlur={onBlur}
@@ -117,27 +120,27 @@ function SearchBookInput({
   );
 }
 
-function BookList({
+function BookSearchResult({
   books,
   selectedIndex,
-  isFocus,
-  search,
+  isFocused,
+  keyword,
 }: {
   books: Book[] | undefined;
   selectedIndex: null | number;
-  isFocus: boolean;
-  search: string;
+  isFocused: boolean;
+  keyword: string;
 }) {
   if (!books) {
     return (
-      <div className={`${isFocus ? 'h-150' : 'h-25'} flex flex-col items-center justify-center`}>
+      <div className={`${isFocused ? 'h-150' : 'h-25'} flex flex-col items-center justify-center`}>
         <span className="mb-2 text-[15px] font-semibold text-gray-600">어떤 책을 기록할까요?</span>
         <span className="text-[13px] text-zinc-400">읽은 책의 제목이나 저자를 입력해 보세요.</span>
       </div>
     );
   }
 
-  if (books.length === 0 && search.length !== 0) {
+  if (books.length === 0 && keyword.length !== 0) {
     return (
       <div className="flex h-150 flex-col items-center justify-center">
         <span className="mb-1 text-zinc-400 opacity-80">
@@ -157,7 +160,7 @@ function BookList({
 
         <span className="mb-2 text-[15px] font-semibold text-gray-600">검색 결과가 없어요.</span>
         <span className="text-center text-[13px] text-zinc-400">
-          &apos;{search}&apos;(으)로 찾은 책이 없어요.
+          &apos;{keyword}&apos;(으)로 찾은 책이 없어요.
           <br /> 다른 제목이나 저자로 검색해 보세요.
         </span>
       </div>
@@ -166,7 +169,7 @@ function BookList({
 
   return (
     <div
-      className={`${isFocus ? 'h-150' : 'h-25'} -mx-3.5 mt-3.5 origin-top animate-[dropSpring_0.34s_cubic-bezier(0.34,1.42,0.5,1)] overflow-y-scroll`}
+      className={`${isFocused ? 'h-150' : 'h-25'} -mx-3.5 mt-3.5 origin-top animate-[dropSpring_0.34s_cubic-bezier(0.34,1.42,0.5,1)] overflow-y-scroll`}
     >
       {books.map((book, index) => {
         const isSelected = selectedIndex === index;
