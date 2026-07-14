@@ -2,7 +2,6 @@
 
 // TODO: next img 컴포넌트 써보기
 // TODO: infinite use query
-// FIXME: 키보드 입력때 e.preventDefault 오류 수정
 // FIXME: 키보드 이벤트 할 때 스크롤도 내려가게(구글도 없기는한디)
 // FIXME: 변수명도 다시 생각하고
 
@@ -70,12 +69,14 @@ function SearchBookInput({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // TODO: enter(form 적용)와 esc(검색창 제거) 처리
     if (e.key === 'ArrowDown') {
+      e.preventDefault();
       setSelectedIndex(prev => {
         if (isNull(prev) || prev === totalBookLength - 1) return 0;
         return prev + 1;
       });
     }
     if (e.key === 'ArrowUp') {
+      e.preventDefault();
       setSelectedIndex(prev => {
         if (isNull(prev) || prev === 0) return totalBookLength - 1;
         return prev - 1;
