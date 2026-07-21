@@ -1,5 +1,5 @@
-import { AutoCompleteInput } from "@/components/AutoCompleteInput";
+import { Form } from '@/components/Form';
 
 export default function Home() {
-  return <AutoCompleteInput />;
+  return <Form />;
 }

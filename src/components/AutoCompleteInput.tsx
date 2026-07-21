@@ -33,7 +33,7 @@ export function AutoCompleteInput() {
   };
 
   return (
-    <div className="mx-auto my-0 w-105 rounded-[18px] border border-solid border-zinc-200 p-3.5">
+    <div className="rounded-[18px] border border-solid border-zinc-200 p-3.5">
       <BookSearchInput
         keyword={keyword}
         setKeyword={setKeyword}
