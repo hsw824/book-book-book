@@ -3,6 +3,7 @@
 import { ChangeEvent, useState } from 'react';
 import { AutoCompleteInput } from './AutoCompleteInput';
 import { isNull } from 'es-toolkit';
+import { Toggle } from './Toggle';
 
 const GENRES = [
   '소설',
@@ -79,13 +80,6 @@ export function Form() {
     });
     setQuotes(modifiedQuote);
   };
-
-  const handleIsEbook = () => {
-    console.log('label');
-    setIsEbook(prev => !prev);
-  };
-
-  // FIXME: 라벨 컴포넌트 그 안에 children형식으로 div>span, span으로 되어 있는데 <div><label></label> <span>필수 여부</span> <input/> or <textarea/></div>
 
   return (
     <form className="mx-auto h-300 w-200 rounded-[18px] border border-solid border-zinc-200 p-10">
@@ -176,13 +170,7 @@ export function Form() {
       </FormFiled>
 
       <div className="mb-2 flex items-center gap-2">
-        <div className={`${isEbook ? 'bg-blue-500' : 'bg-zinc-200'} flex h-7.5 w-15 items-center rounded-[18px] p-1`}>
-          <input type="checkbox" className="hidden" id="ebook" checked={isEbook} onChange={handleIsEbook} />
-          <label
-            htmlFor="ebook"
-            className={`radius block h-5 w-5 cursor-pointer rounded-[50%] bg-white transition-all duration-200 ease-in ${isEbook ? 'translate-x-[160%]' : ''}`}
-          />
-        </div>
+        <Toggle toggle={isEbook} setToggle={() => setIsEbook(prev => !prev)} />
         <span className="text-sm"> 이책은 ebook으로 읽었어요</span>
       </div>
 
