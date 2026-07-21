@@ -23,32 +23,6 @@ const GENRES = [
 const RATINGS = [1, 2, 3, 4, 5] as const;
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
 
-function SectionTitle({ title }: { title: string }) {
-  return <p className="mb-4 font-semibold text-zinc-400">{title}</p>;
-}
-
-function FormFiled({
-  htmlFor,
-  title,
-  children,
-  isRequired = false,
-}: {
-  htmlFor?: string;
-  title: string;
-  children: React.ReactNode;
-  isRequired?: boolean;
-}) {
-  return (
-    <div>
-      <div className="mb-2 flex items-center gap-2">
-        <label htmlFor={htmlFor}>{title}</label>
-        {isRequired && <span className="text-red-600">*</span>}
-      </div>
-      {children}
-    </div>
-  );
-}
-
 export function Form() {
   const [rating, setRating] = useState<null | 1 | 2 | 3 | 4 | 5>(null);
   const [hoverRating, setHoverRating] = useState<null | 1 | 2 | 3 | 4 | 5>(null);
@@ -179,5 +153,31 @@ export function Form() {
         기록하기
       </button>
     </form>
+  );
+}
+
+function SectionTitle({ title }: { title: string }) {
+  return <p className="mb-4 font-semibold text-zinc-400">{title}</p>;
+}
+
+function FormFiled({
+  htmlFor,
+  title,
+  children,
+  isRequired = false,
+}: {
+  htmlFor?: string;
+  title: string;
+  children: React.ReactNode;
+  isRequired?: boolean;
+}) {
+  return (
+    <div>
+      <div className="mb-2 flex items-center gap-2">
+        <label htmlFor={htmlFor}>{title}</label>
+        {isRequired && <span className="text-red-600">*</span>}
+      </div>
+      {children}
+    </div>
   );
 }
