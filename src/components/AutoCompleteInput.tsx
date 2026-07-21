@@ -2,7 +2,7 @@
 
 // TODO: infinite use query
 // FIXME: 키보드 이벤트 할 때 스크롤도 내려가게(구글도 없기는한디)
-// TODO: zustand 고려
+// TODO: zustand 고려(selectedBook)
 // TODO: 컴포넌트 분리 / compound component 고려
 
 import { useSearchDebounce } from '@/hooks/useDebounce';
@@ -13,7 +13,11 @@ import { isNull } from 'es-toolkit';
 import { useState } from 'react';
 import Image from 'next/image';
 
-export function AutoCompleteInput() {
+export function AutoCompleteInput({
+  setSelectedBook,
+}: {
+  setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
+}) {
   const [keyword, setKeyword] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -43,7 +47,13 @@ export function AutoCompleteInput() {
         onBlur={handleBlur}
       />
       {isFocused && (
-        <BookSearchResult books={books} selectedIndex={selectedIndex} isFocused={isFocused} keyword={keyword} />
+        <BookSearchResult
+          books={books}
+          selectedIndex={selectedIndex}
+          isFocused={isFocused}
+          keyword={keyword}
+          setSelectedBook={setSelectedBook}
+        />
       )}
     </div>
   );
@@ -125,11 +135,13 @@ function BookSearchResult({
   selectedIndex,
   isFocused,
   keyword,
+  setSelectedBook,
 }: {
   books: Book[] | undefined;
   selectedIndex: null | number;
   isFocused: boolean;
   keyword: string;
+  setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
 }) {
   if (!books) {
     return (
@@ -179,7 +191,7 @@ function BookSearchResult({
             key={book.isbn}
             className={`${isSelected ? 'bg-indigo-50 shadow-[inset_2px_0_0_var(--color-blue-600)]' : ''} border-t border-solid border-gray-100`}
           >
-            <div className="flex cursor-pointer gap-3 px-4 py-3">
+            <div className="flex cursor-pointer gap-3 px-4 py-3" onMouseDown={() => setSelectedBook(book)}>
               <Image src={book.thumbnail} alt="책 사진" width={46} height={64} className="rounded-[3px]" />
               <div className="flex flex-col justify-start">
                 <span className="text-[15px] font-medium text-neutral-800">{book.title}</span>
