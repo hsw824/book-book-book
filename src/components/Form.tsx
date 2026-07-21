@@ -4,6 +4,8 @@ import { ChangeEvent, useState } from 'react';
 import { AutoCompleteInput } from './AutoCompleteInput';
 import { isNull } from 'es-toolkit';
 import { Toggle } from './Toggle';
+import { Book } from '@/models/bookTypes';
+import Image from 'next/image';
 
 const GENRES = [
   '소설',
@@ -24,6 +26,7 @@ const RATINGS = [1, 2, 3, 4, 5] as const;
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
 
 export function Form() {
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [rating, setRating] = useState<null | 1 | 2 | 3 | 4 | 5>(null);
   const [hoverRating, setHoverRating] = useState<null | 1 | 2 | 3 | 4 | 5>(null);
   const [quotes, setQuotes] = useState([{ page: '', text: '', id: 0 }]);
@@ -59,9 +62,7 @@ export function Form() {
   return (
     <form className="mx-auto h-300 w-200 rounded-[18px] border border-solid border-zinc-200 p-10">
       <SectionTitle title="책 정보" />
-      <FormFiled title="책 검색" isRequired>
-        <AutoCompleteInput />
-      </FormFiled>
+      <BookSearch book={selectedBook} setSelectedBook={setSelectedBook} />
       <hr className="my-6 h-3 w-full text-gray-100" />
 
       <SectionTitle title="기록 정보" />
@@ -178,6 +179,46 @@ function FormFiled({
         {isRequired && <span className="text-red-600">*</span>}
       </div>
       {children}
+    </div>
+  );
+}
+
+function BookSearch({
+  book,
+  setSelectedBook,
+}: {
+  book: Book | null;
+  setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
+}) {
+  const handleModify = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setSelectedBook(null);
+  };
+
+  if (isNull(book)) {
+    return (
+      <FormFiled title="책 검색" isRequired>
+        <AutoCompleteInput setSelectedBook={setSelectedBook} />
+      </FormFiled>
+    );
+  }
+
+  return (
+    <div className="flex items-start gap-3.5 rounded-xl bg-zinc-200 px-4 py-3.5">
+      <Image src={book.thumbnail} alt="책 사진" width={46} height={64} className="rounded-[3px]" />
+      <div className="items-between flex basis-[82%] flex-col">
+        <span className="text-[15px] font-semibold">{book.title}</span>
+        <span className="text-[12px]">{book.authors}</span>
+        <span className="text-[12px]">
+          {book.publisher} · {new Date(book.datetime).getFullYear()}
+        </span>
+      </div>
+      <button
+        className="cursor-pointer rounded-2xl bg-white px-3 py-1.5 text-[12px] text-gray-600"
+        onClick={handleModify}
+      >
+        변경
+      </button>
     </div>
   );
 }
