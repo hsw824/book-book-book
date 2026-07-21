@@ -61,7 +61,8 @@ export function Form() {
     setQuotes(quotes.filter(quote => quote.id !== id));
   };
 
-  const handleQuoteAdd = () => {
+  const handleQuoteAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setQuotes([...quotes, { id: new Date().getMilliseconds(), text: '', page: '' }]);
   };
 
@@ -162,7 +163,7 @@ export function Form() {
             )}
           </div>
         ))}
-        <button onClick={handleQuoteAdd} className="mb-2">
+        <button onClick={handleQuoteAdd} className="mb-2 cursor-pointer">
           <p className="text-[13px] text-blue-600">
             <span>+</span> 구절 추가
           </p>
