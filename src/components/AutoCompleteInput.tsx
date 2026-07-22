@@ -50,7 +50,6 @@ export function AutoCompleteInput({
         <BookSearchResult
           books={books}
           selectedIndex={selectedIndex}
-          isFocused={isFocused}
           keyword={keyword}
           setSelectedBook={setSelectedBook}
         />
@@ -133,13 +132,11 @@ function BookSearchInput({
 function BookSearchResult({
   books,
   selectedIndex,
-  isFocused,
   keyword,
   setSelectedBook,
 }: {
   books: Book[] | undefined;
   selectedIndex: null | number;
-  isFocused: boolean;
   keyword: string;
   setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
 }) {
