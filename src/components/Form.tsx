@@ -137,13 +137,14 @@ export function Form() {
               <button
                 className="flex basis-[5%] cursor-pointer items-center justify-center text-neutral-800"
                 onClick={() => remove(index)}
+                type="button"
               >
                 x
               </button>
             )}
           </div>
         ))}
-        <button onClick={() => append({ text: '', page: 0 })} className="mb-2 cursor-pointer">
+        <button type="button" onClick={() => append({ text: '', page: 0 })} className="mb-2 cursor-pointer">
           <p className="text-[13px] text-blue-600">
             <span>+</span> 구절 추가
           </p>
@@ -155,7 +156,10 @@ export function Form() {
         <span className="text-sm"> 이책은 ebook으로 읽었어요</span>
       </div>
 
-      <button className="we h-12 w-full cursor-pointer rounded-[18px] bg-blue-500 text-[15px] font-semibold text-white">
+      <button
+        type="submit"
+        className="we h-12 w-full cursor-pointer rounded-[18px] bg-blue-500 text-[15px] font-semibold text-white"
+      >
         기록하기
       </button>
     </form>
@@ -206,6 +210,7 @@ function BookSearch({ control }: { control: Control<BookForm> }) {
                 </span>
               </div>
               <button
+                type="button"
                 className="cursor-pointer rounded-2xl bg-white px-3 py-1.5 text-[12px] text-gray-600"
                 onClick={() => onChange(null)}
               >
