@@ -1,11 +1,12 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { AutoCompleteInput } from './AutoCompleteInput';
 import { isNull } from 'es-toolkit';
 import { Toggle } from './Toggle';
 import { Book } from '@/models/bookTypes';
 import Image from 'next/image';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
 const GENRES = [
   '소설',
@@ -25,44 +26,45 @@ const GENRES = [
 const RATINGS = [1, 2, 3, 4, 5] as const;
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
 
+type BookForm = {
+  date: string;
+  review: string;
+  quotes: {
+    page: number;
+    text: string;
+  }[];
+};
+
 export function Form() {
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [rating, setRating] = useState<null | 1 | 2 | 3 | 4 | 5>(null);
   const [hoverRating, setHoverRating] = useState<null | 1 | 2 | 3 | 4 | 5>(null);
-  const [quotes, setQuotes] = useState([{ page: '', text: '', id: 0 }]);
   const [isEbook, setIsEbook] = useState(false);
 
   const displayRating = isNull(hoverRating) ? rating : hoverRating;
 
-  const handleQuoteDelete = (id: number) => {
-    setQuotes(quotes.filter(quote => quote.id !== id));
-  };
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<BookForm>({
+    defaultValues: { quotes: [{ page: 0, text: '' }] },
+  });
 
-  const handleQuoteAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setQuotes([...quotes, { id: new Date().getMilliseconds(), text: '', page: '' }]);
-  };
+  const { fields, append, remove } = useFieldArray({ control, name: 'quotes' });
 
-  const handlePageModify = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>, id: number) => {
-    const modifiedQuote = quotes.map(quote => {
-      if (quote.id === id) return { ...quote, page: e.target.value };
-      return quote;
-    });
-    setQuotes(modifiedQuote);
-  };
-
-  const handleTextModify = (e: ChangeEvent<HTMLTextAreaElement, HTMLTextAreaElement>, id: number) => {
-    const modifiedQuote = quotes.map(quote => {
-      if (quote.id === id) return { ...quote, text: e.target.value };
-      return quote;
-    });
-    setQuotes(modifiedQuote);
+  const onSubmit: SubmitHandler<BookForm> = data => {
+    console.log(errors);
+    console.log(data);
   };
 
   return (
-    <form className="mx-auto h-300 w-200 rounded-[18px] border border-solid border-zinc-200 p-10">
+    <form
+      className="mx-auto h-300 w-200 rounded-[18px] border border-solid border-zinc-200 p-10"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <SectionTitle title="책 정보" />
-      <BookSearch book={selectedBook} setSelectedBook={setSelectedBook} />
+      <BookSearch control={control} />
       <hr className="my-6 h-3 w-full text-gray-100" />
 
       <SectionTitle title="기록 정보" />
@@ -82,7 +84,9 @@ export function Form() {
           id="finishedAt"
           type="date"
           className="mb-2 w-full cursor-pointer rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-sm outline-none"
+          {...register('date', { required: true })}
         />
+        {errors.date && <span className="text-sm text-red-600">다 읽은 날짜를 입력해주세요.</span>}
       </FormFiled>
 
       <FormFiled title="평점" isRequired>
@@ -108,37 +112,37 @@ export function Form() {
         <textarea
           id="review"
           placeholder="한줄평부터 자세한 감상까지 자유롭게 남겨보세요!"
-          className="mb-2 w-full resize-none rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-[14.5px] outline-none"
+          className="w-full resize-none rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-[14.5px] outline-none"
+          {...register('review', { required: true })}
         />
+        {errors.review && <span className="text-sm text-red-600">감상을 입력해주세요.</span>}
       </FormFiled>
 
       <FormFiled title="필사하고 싶은 구절">
-        {quotes.map(quote => (
-          <div key={quote.id} className="mb-2 flex rounded-[18px] border border-solid border-zinc-200">
+        {fields.map((filed, index) => (
+          <div key={filed.id} className="mb-2 flex rounded-[18px] border border-solid border-zinc-200">
             <p className="flex basis-[4%] items-center justify-center text-[12px] text-neutral-800">P.</p>
             <input
               className="basis-[6%] border-r border-zinc-200 p-2 text-[12px] text-neutral-800 outline-none"
               type="number"
-              value={quote.page}
-              onChange={e => handlePageModify(e, quote.id)}
+              {...register(`quotes.${index}.page`)}
             />
             <textarea
-              className={`${quotes.length > 1 ? 'basis-[85%] border-r border-zinc-200' : 'basis-[90%]'} resize-none p-2 text-sm outline-none`}
-              value={quote.text}
-              onChange={e => handleTextModify(e, quote.id)}
+              className={`${fields.length > 1 ? 'basis-[85%] border-r border-zinc-200' : 'basis-[90%]'} resize-none p-2 text-sm outline-none`}
               placeholder="마음에 남는 문장을 옮겨보세요"
+              {...register(`quotes.${index}.text`)}
             />
-            {quotes.length > 1 && (
+            {fields.length > 1 && (
               <button
                 className="flex basis-[5%] cursor-pointer items-center justify-center text-neutral-800"
-                onClick={() => handleQuoteDelete(quote.id)}
+                onClick={() => remove(index)}
               >
                 x
               </button>
             )}
           </div>
         ))}
-        <button onClick={handleQuoteAdd} className="mb-2 cursor-pointer">
+        <button onClick={() => append({ text: '', page: 0 })} className="mb-2 cursor-pointer">
           <p className="text-[13px] text-blue-600">
             <span>+</span> 구절 추가
           </p>
