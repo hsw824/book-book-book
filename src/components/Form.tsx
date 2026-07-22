@@ -1,4 +1,6 @@
 'use client';
+// TODO: BookSearch 조건부 렌더링에서 컴포넌트로 분리하기
+// TODO: 평점도 input label형태로 바꿔보기
 
 import { useState } from 'react';
 import { AutoCompleteInput } from './AutoCompleteInput';
@@ -6,7 +8,7 @@ import { isNull } from 'es-toolkit';
 import { Toggle } from './Toggle';
 import { Book } from '@/models/bookTypes';
 import Image from 'next/image';
-import { Control, Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { Control, Controller, FieldErrors, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
 const GENRES = [
   '소설',
@@ -27,7 +29,7 @@ const RATINGS = [1, 2, 3, 4, 5] as const;
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
 
 type BookForm = {
-  bookInfo: Book;
+  bookInfo: Book | null;
   date: string;
   review: string;
   quotes: {
@@ -65,7 +67,7 @@ export function Form() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <SectionTitle title="책 정보" />
-      <BookSearch control={control} />
+      <BookSearch control={control} errors={errors} />
       <hr className="my-6 h-3 w-full text-gray-100" />
 
       <SectionTitle title="기록 정보" />
@@ -192,7 +194,7 @@ function FormFiled({
   );
 }
 
-function BookSearch({ control }: { control: Control<BookForm> }) {
+function BookSearch({ control, errors }: { control: Control<BookForm>; errors: FieldErrors<BookForm> }) {
   return (
     <FormFiled title="책 검색" isRequired>
       <Controller
@@ -221,7 +223,10 @@ function BookSearch({ control }: { control: Control<BookForm> }) {
             <AutoCompleteInput onChange={onChange} />
           );
         }}
+        rules={{ required: true }}
       />
+
+      {errors.bookInfo && <span className="text-sm text-red-600">읽은 책을 입력해 주세요.</span>}
     </FormFiled>
   );
 }
