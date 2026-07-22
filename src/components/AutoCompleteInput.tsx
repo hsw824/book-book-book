@@ -13,11 +13,7 @@ import { isNull } from 'es-toolkit';
 import { useState } from 'react';
 import Image from 'next/image';
 
-export function AutoCompleteInput({
-  setSelectedBook,
-}: {
-  setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
-}) {
+export function AutoCompleteInput({ onChange }: { onChange: (book: Book) => void }) {
   const [keyword, setKeyword] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -47,12 +43,7 @@ export function AutoCompleteInput({
         onBlur={handleBlur}
       />
       {isFocused && (
-        <BookSearchResult
-          books={books}
-          selectedIndex={selectedIndex}
-          keyword={keyword}
-          setSelectedBook={setSelectedBook}
-        />
+        <BookSearchResult books={books} selectedIndex={selectedIndex} keyword={keyword} onChange={onChange} />
       )}
     </div>
   );
@@ -133,12 +124,12 @@ function BookSearchResult({
   books,
   selectedIndex,
   keyword,
-  setSelectedBook,
+  onChange,
 }: {
   books: Book[] | undefined;
   selectedIndex: null | number;
   keyword: string;
-  setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
+  onChange: (book: Book) => void;
 }) {
   if (!books) {
     return (
@@ -186,7 +177,7 @@ function BookSearchResult({
             key={book.isbn}
             className={`${isSelected ? 'bg-indigo-50 shadow-[inset_2px_0_0_var(--color-blue-600)]' : ''} ${index !== 0 ? 'border-t' : ''} border-solid border-gray-100`}
           >
-            <div className="flex cursor-pointer gap-3 px-4 py-3" onMouseDown={() => setSelectedBook(book)}>
+            <div className="flex cursor-pointer gap-3 px-4 py-3" onMouseDown={() => onChange(book)}>
               <Image src={book.thumbnail} alt="책 사진" width={46} height={64} className="rounded-[3px]" />
               <div className="flex flex-col justify-start">
                 <span className="text-[15px] font-medium text-neutral-800">{book.title}</span>
