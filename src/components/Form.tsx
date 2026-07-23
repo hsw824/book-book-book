@@ -47,8 +47,6 @@ type BookForm = {
 const TODAY_STRING = new Date().toLocaleDateString('sv-SE');
 
 export function Form() {
-  const [hoverRating, setHoverRating] = useState<null | Rating>(null);
-
   const {
     register,
     handleSubmit,
@@ -108,7 +106,7 @@ export function Form() {
         {errors.date && <span className="text-sm text-red-600">다 읽은 날짜를 입력해주세요.</span>}
       </FormFiled>
 
-      <RatingFiled control={control} hoverRating={hoverRating} setHoverRating={setHoverRating} errors={errors} />
+      <RatingFiled control={control} errors={errors} />
 
       <FormFiled title="감상" isRequired htmlFor="review">
         <textarea
@@ -234,17 +232,9 @@ function BookSearch({ control, errors }: { control: Control<BookForm>; errors: F
   );
 }
 
-function RatingFiled({
-  control,
-  errors,
-  hoverRating,
-  setHoverRating,
-}: {
-  control: Control<BookForm>;
-  errors: FieldErrors<BookForm>;
-  hoverRating: Rating | null;
-  setHoverRating: React.Dispatch<React.SetStateAction<Rating | null>>;
-}) {
+function RatingFiled({ control, errors }: { control: Control<BookForm>; errors: FieldErrors<BookForm> }) {
+  const [hoverRating, setHoverRating] = useState<null | Rating>(null);
+
   return (
     <FormFiled title="평점" isRequired>
       <Controller
@@ -259,7 +249,7 @@ function RatingFiled({
               {RATINGS.map(rate => (
                 <span
                   key={rate}
-                  className={`cursor-pointer ${!isNull(displayRating) && rate <= displayRating ? 'text-blue-600' : 'text-zinc-300'}`}
+                  className={`cursor-pointer transition-all duration-200 ease-in ${!isNull(displayRating) && rate <= displayRating ? 'text-blue-600' : 'text-zinc-300'}`}
                   onClick={() => onChange(rate)}
                   onMouseEnter={() => setHoverRating(rate)}
                   onMouseLeave={() => setHoverRating(null)}
