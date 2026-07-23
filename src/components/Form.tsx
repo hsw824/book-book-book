@@ -125,7 +125,7 @@ export function Form() {
             <input
               className="basis-[6%] border-r border-zinc-200 p-2 text-[12px] text-neutral-800 outline-none"
               type="number"
-              {...register(`quotes.${index}.page`)}
+              {...register(`quotes.${index}.page`, { valueAsNumber: true })}
             />
             <textarea
               className={`${fields.length > 1 ? 'basis-[85%] border-r border-zinc-200' : 'basis-[90%]'} resize-none p-2 text-sm outline-none`}
