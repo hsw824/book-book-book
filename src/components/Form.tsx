@@ -8,7 +8,7 @@ import { isNull } from 'es-toolkit';
 import { Toggle } from './Toggle';
 import { Book } from '@/models/bookTypes';
 import Image from 'next/image';
-import { Control, Controller, FieldErrors, SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { Control, Controller, SubmitHandler, useFieldArray, useForm, useFormState } from 'react-hook-form';
 
 const GENRES = [
   '소설',
@@ -80,7 +80,7 @@ export function Form() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <SectionTitle title="책 정보" />
-      <BookSearch control={control} errors={errors} />
+      <BookSearch control={control} />
       <hr className="my-6 h-3 w-full text-gray-100" />
 
       <SectionTitle title="기록 정보" />
@@ -101,21 +101,21 @@ export function Form() {
           id="finishedAt"
           type="finishedAt"
           className="mb-2 w-full cursor-pointer rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-sm outline-none"
-          {...register('finishedAt', { required: true })}
+          {...register('finishedAt', { required: '다 읽은 날짜를 입력해주세요.' })}
         />
-        {errors.finishedAt && <span className="text-sm text-red-600">다 읽은 날짜를 입력해주세요.</span>}
+        {errors.finishedAt && <span className="text-sm text-red-600">{errors.finishedAt.message}</span>}
       </FormFiled>
 
-      <RatingFiled control={control} errors={errors} />
+      <RatingFiled control={control} />
 
       <FormFiled title="감상" isRequired htmlFor="review">
         <textarea
           id="review"
           placeholder="한줄평부터 자세한 감상까지 자유롭게 남겨보세요!"
           className="w-full resize-none rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-[14.5px] outline-none"
-          {...register('review', { required: true })}
+          {...register('review', { required: '감상을 입력해주세요.' })}
         />
-        {errors.review && <span className="text-sm text-red-600">감상을 입력해주세요.</span>}
+        {errors.review && <span className="text-sm text-red-600">{errors.review.message}</span>}
       </FormFiled>
 
       <FormFiled title="필사하고 싶은 구절">
@@ -195,7 +195,9 @@ function FormFiled({
   );
 }
 
-function BookSearch({ control, errors }: { control: Control<BookForm>; errors: FieldErrors<BookForm> }) {
+function BookSearch({ control }: { control: Control<BookForm> }) {
+  const { errors } = useFormState({ control, name: 'bookInfo' });
+
   return (
     <FormFiled title="책 검색" isRequired>
       <Controller
@@ -224,15 +226,16 @@ function BookSearch({ control, errors }: { control: Control<BookForm>; errors: F
             <AutoCompleteInput onChange={onChange} />
           );
         }}
-        rules={{ required: true }}
+        rules={{ required: '읽은 책을 입력해 주세요.' }}
       />
 
-      {errors.bookInfo && <span className="text-sm text-red-600">읽은 책을 입력해 주세요.</span>}
+      {errors.bookInfo && <span className="text-sm text-red-600">{errors.bookInfo.message}</span>}
     </FormFiled>
   );
 }
 
-function RatingFiled({ control, errors }: { control: Control<BookForm>; errors: FieldErrors<BookForm> }) {
+function RatingFiled({ control }: { control: Control<BookForm> }) {
+  const { errors } = useFormState({ control, name: 'rating' });
   const [hoverRating, setHoverRating] = useState<null | Rating>(null);
 
   return (
@@ -240,7 +243,7 @@ function RatingFiled({ control, errors }: { control: Control<BookForm>; errors: 
       <Controller
         control={control}
         name="rating"
-        rules={{ required: true }}
+        rules={{ required: '평점을 기록해 보세요.' }}
         render={({ field: { onChange, value } }) => {
           const displayRating = isNull(hoverRating) ? value : hoverRating;
 
@@ -266,7 +269,7 @@ function RatingFiled({ control, errors }: { control: Control<BookForm>; errors: 
           );
         }}
       />
-      {errors.rating && <span className="text-sm text-red-600">평점을 기록해 보세요.</span>}
+      {errors.rating && <span className="text-sm text-red-600">{errors.rating.message}</span>}
     </FormFiled>
   );
 }
