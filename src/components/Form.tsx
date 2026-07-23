@@ -33,7 +33,7 @@ const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아
 
 type BookForm = {
   bookInfo: Book | null;
-  date: string;
+  finishedAt: string;
   review: string;
   quotes: {
     page: number;
@@ -55,7 +55,7 @@ export function Form() {
   } = useForm<BookForm>({
     defaultValues: {
       bookInfo: null,
-      date: TODAY_STRING,
+      finishedAt: TODAY_STRING,
       review: '',
       quotes: [{ page: 0, text: '' }],
       genre: '소설',
@@ -99,11 +99,11 @@ export function Form() {
       <FormFiled title="다 읽은 날짜" isRequired htmlFor="finishedAt">
         <input
           id="finishedAt"
-          type="date"
+          type="finishedAt"
           className="mb-2 w-full cursor-pointer rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-sm outline-none"
-          {...register('date', { required: true })}
+          {...register('finishedAt', { required: true })}
         />
-        {errors.date && <span className="text-sm text-red-600">다 읽은 날짜를 입력해주세요.</span>}
+        {errors.finishedAt && <span className="text-sm text-red-600">다 읽은 날짜를 입력해주세요.</span>}
       </FormFiled>
 
       <RatingFiled control={control} errors={errors} />
