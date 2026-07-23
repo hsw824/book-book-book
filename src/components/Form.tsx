@@ -84,7 +84,7 @@ export function Form() {
       <hr className="my-6 h-3 w-full text-gray-100" />
 
       <SectionTitle title="기록 정보" />
-      <FormFiled title="장르" isRequired htmlFor="genres">
+      <FormField title="장르" isRequired htmlFor="genres">
         <select
           id="genres"
           className="mb-2 w-full cursor-pointer rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-sm outline-none"
@@ -94,21 +94,21 @@ export function Form() {
             <option key={genre}>{genre}</option>
           ))}
         </select>
-      </FormFiled>
+      </FormField>
 
-      <FormFiled title="다 읽은 날짜" isRequired htmlFor="finishedAt">
+      <FormField title="다 읽은 날짜" isRequired htmlFor="finishedAt">
         <input
           id="finishedAt"
-          type="finishedAt"
+          type="date"
           className="mb-2 w-full cursor-pointer rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-sm outline-none"
           {...register('finishedAt', { required: '다 읽은 날짜를 입력해주세요.' })}
         />
         {errors.finishedAt && <span className="text-sm text-red-600">{errors.finishedAt.message}</span>}
-      </FormFiled>
+      </FormField>
 
       <RatingFiled control={control} />
 
-      <FormFiled title="감상" isRequired htmlFor="review">
+      <FormField title="감상" isRequired htmlFor="review">
         <textarea
           id="review"
           placeholder="한줄평부터 자세한 감상까지 자유롭게 남겨보세요!"
@@ -116,9 +116,9 @@ export function Form() {
           {...register('review', { required: '감상을 입력해주세요.' })}
         />
         {errors.review && <span className="text-sm text-red-600">{errors.review.message}</span>}
-      </FormFiled>
+      </FormField>
 
-      <FormFiled title="필사하고 싶은 구절">
+      <FormField title="필사하고 싶은 구절">
         {fields.map((filed, index) => (
           <div key={filed.id} className="mb-2 flex rounded-[18px] border border-solid border-zinc-200">
             <p className="flex basis-[4%] items-center justify-center text-[12px] text-neutral-800">P.</p>
@@ -148,7 +148,7 @@ export function Form() {
             <span>+</span> 구절 추가
           </p>
         </button>
-      </FormFiled>
+      </FormField>
 
       <div className="mb-2 flex items-center gap-2">
         <Controller
@@ -173,7 +173,7 @@ function SectionTitle({ title }: { title: string }) {
   return <p className="mb-4 font-semibold text-zinc-400">{title}</p>;
 }
 
-function FormFiled({
+function FormField({
   htmlFor,
   title,
   children,
@@ -199,7 +199,7 @@ function BookSearch({ control }: { control: Control<BookForm> }) {
   const { errors } = useFormState({ control, name: 'bookInfo' });
 
   return (
-    <FormFiled title="책 검색" isRequired>
+    <FormField title="책 검색" isRequired>
       <Controller
         control={control}
         name="bookInfo"
@@ -230,7 +230,7 @@ function BookSearch({ control }: { control: Control<BookForm> }) {
       />
 
       {errors.bookInfo && <span className="text-sm text-red-600">{errors.bookInfo.message}</span>}
-    </FormFiled>
+    </FormField>
   );
 }
 
@@ -239,7 +239,7 @@ function RatingFiled({ control }: { control: Control<BookForm> }) {
   const [hoverRating, setHoverRating] = useState<null | Rating>(null);
 
   return (
-    <FormFiled title="평점" isRequired>
+    <FormField title="평점" isRequired>
       <Controller
         control={control}
         name="rating"
@@ -270,6 +270,6 @@ function RatingFiled({ control }: { control: Control<BookForm> }) {
         }}
       />
       {errors.rating && <span className="text-sm text-red-600">{errors.rating.message}</span>}
-    </FormFiled>
+    </FormField>
   );
 }
