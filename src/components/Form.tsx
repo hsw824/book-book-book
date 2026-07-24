@@ -8,7 +8,9 @@ import { isNull } from 'es-toolkit';
 import { Toggle } from './Toggle';
 import { Book } from '@/models/bookTypes';
 import Image from 'next/image';
-import { Control, Controller, SubmitHandler, useFieldArray, useForm, useFormState } from 'react-hook-form';
+import { Control, Controller, useFieldArray, useForm, useFormState } from 'react-hook-form';
+import { useRecordMutation } from '@/hooks/useRecordMutation';
+import toast from 'react-hot-toast';
 
 const GENRES = [
   '소설',
@@ -31,7 +33,7 @@ const RATINGS = [1, 2, 3, 4, 5] as const;
 type Rating = (typeof RATINGS)[number];
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
 
-type BookForm = {
+export type BookForm = {
   bookInfo: Book | null;
   finishedAt: string;
   review: string;
@@ -51,7 +53,8 @@ export function Form() {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
+    reset,
   } = useForm<BookForm>({
     defaultValues: {
       bookInfo: null,
@@ -69,9 +72,16 @@ export function Form() {
     name: 'quotes',
   });
 
-  const onSubmit: SubmitHandler<BookForm> = data => {
-    console.log(errors);
-    console.log(data);
+  const { mutateAsync: recordMutateAsync, isPending } = useRecordMutation();
+
+  const onSubmit = (data: BookForm) => {
+    try {
+      recordMutateAsync(data);
+      toast.success('기록이 완료되었어요!');
+      reset();
+    } catch {
+      toast.error('오류가 발생했어요. 다시 시도해 주세요.');
+    }
   };
 
   return (
@@ -158,10 +168,10 @@ export function Form() {
         />
         <span className="text-sm"> 이책은 ebook으로 읽었어요</span>
       </div>
-
       <button
         type="submit"
-        className="we h-12 w-full cursor-pointer rounded-[18px] bg-blue-500 text-[15px] font-semibold text-white"
+        className="we h-12 w-full cursor-pointer rounded-[18px] bg-blue-500 text-[15px] font-semibold text-white disabled:bg-gray-300"
+        disabled={!isValid || isPending}
       >
         기록하기
       </button>
