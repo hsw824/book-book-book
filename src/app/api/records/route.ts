@@ -42,6 +42,7 @@ export async function GET() {
           title: true,
           author: true,
           coverUrl: true,
+          publisher: true,
         },
       },
     },
