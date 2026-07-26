@@ -1,12 +1,12 @@
-import Link from 'next/link';
+'use client';
+
+import { Dashboard } from '@/components/Dashboard';
+import { Suspense } from 'react';
 
 export default function Home() {
   return (
-    <div>
-      <h1 className="mb-8 text-5xl">홈화면</h1>
-      <Link className="border" href="/records/new">
-        새 글 쓰기
-      </Link>
-    </div>
+    <Suspense fallback={<div>대기하셈</div>}>
+      <Dashboard />
+    </Suspense>
   );
 }
