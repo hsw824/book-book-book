@@ -1,10 +1,10 @@
-import { fetchRecords } from '@/services/record';
+import { fetchRecord } from '@/services/record';
 import { queryOptions } from '@tanstack/react-query';
 
 export const recordQueryOption = {
-  records: () =>
+  record: (id: string) =>
     queryOptions({
-      queryKey: ['records'],
-      queryFn: fetchRecords,
+      queryKey: ['record', id],
+      queryFn: () => fetchRecord(id),
     }),
 };
