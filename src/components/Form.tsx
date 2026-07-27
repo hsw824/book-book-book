@@ -11,26 +11,9 @@ import Image from 'next/image';
 import { Control, Controller, useFieldArray, useForm, useFormState } from 'react-hook-form';
 import { useRecordMutation } from '@/hooks/useRecordMutation';
 import toast from 'react-hot-toast';
+import { Rating, RATINGS } from '@/constant/rate';
+import { Genre, GENRES } from '@/constant/genre';
 
-const GENRES = [
-  '소설',
-  '시·희곡',
-  '에세이·산문',
-  '인문·철학',
-  '사회·정치',
-  '역사',
-  '과학·기술',
-  '경제·경영',
-  '자기계발',
-  '예술·대중문화',
-  '종교',
-  '기타',
-] as const;
-
-type Genre = (typeof GENRES)[number];
-
-const RATINGS = [1, 2, 3, 4, 5] as const;
-type Rating = (typeof RATINGS)[number];
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
 
 export type BookForm = {
