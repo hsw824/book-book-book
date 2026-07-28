@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 
 export function RecordDetail({ id }: { id: string }) {
   const { data: recordData } = useSuspenseQuery(recordQueryOption.record(id));
-  const { mutateAsync: deleteMutationAsync } = useDeleteRecordMutation();
+  const { mutateAsync: deleteMutationAsync, isPending } = useDeleteRecordMutation();
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
 
@@ -38,7 +38,7 @@ export function RecordDetail({ id }: { id: string }) {
         <BookReview review={recordData.review} />
         <BookQuotes quotes={recordData.quotes} />
       </div>
-      <RecordDeleteDialog open={open} close={() => setOpen(false)} onDelete={handleDelete} />
+      <RecordDeleteDialog open={open} close={() => setOpen(false)} onDelete={handleDelete} isPending={isPending} />
     </div>
   );
 }

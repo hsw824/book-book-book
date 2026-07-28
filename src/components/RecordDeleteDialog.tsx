@@ -1,11 +1,13 @@
 import { Portal } from './modal/Portal';
 
 export function RecordDeleteDialog({
-  close,
   open,
+  isPending,
+  close,
   onDelete,
 }: {
   open: boolean;
+  isPending: boolean;
   close: () => void;
   onDelete: () => void;
 }) {
@@ -21,14 +23,18 @@ export function RecordDeleteDialog({
         </div>
         <div className="flex w-full">
           <button
-            className="mr-2 h-10 w-[50%] cursor-pointer rounded-lg border border-zinc-200 text-[14px] font-semibold"
+            type="button"
+            className="mr-2 h-10 w-[50%] cursor-pointer rounded-lg border border-zinc-200 text-[14px] font-semibold disabled:bg-gray-300 disabled:text-white"
             onClick={close}
+            disabled={isPending}
           >
             취소
           </button>
           <button
+            type="button"
             onClick={onDelete}
-            className="h-10 w-[50%] cursor-pointer rounded-lg border border-zinc-200 bg-red-600 text-[14px] font-semibold text-white"
+            className="h-10 w-[50%] cursor-pointer rounded-lg border border-zinc-200 bg-red-600 text-[14px] font-semibold text-white disabled:bg-gray-300"
+            disabled={isPending}
           >
             삭제
           </button>
