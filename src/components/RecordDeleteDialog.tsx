@@ -10,8 +10,11 @@ export function RecordDeleteDialog({
   onDelete: () => void;
 }) {
   return (
-    <Portal open={open}>
-      <div className="flex h-40 w-85 flex-col justify-center rounded-xl bg-white px-3">
+    <Portal open={open} close={close}>
+      <div
+        className="flex h-40 w-85 flex-col justify-center rounded-xl bg-white px-3"
+        onClick={e => e.stopPropagation()}
+      >
         <div className="my-5">
           <p className="text-[16px] font-bold">이 기록을 삭제할까요?</p>
           <span className="mt-1.5 text-[13px] text-gray-600">되돌릴 수 없어요</span>
