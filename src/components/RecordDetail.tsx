@@ -7,23 +7,43 @@ import { recordQueryOption } from '@/queries/recordQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import Image from 'next/image';
+import { RecordDeleteDialog } from './RecordDeleteDialog';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDeleteRecordMutation } from '@/hooks/useRecordMutation';
+import toast from 'react-hot-toast';
 
 export function RecordDetail({ id }: { id: string }) {
   const { data: recordData } = useSuspenseQuery(recordQueryOption.record(id));
+  const { mutateAsync: deleteMutationAsync } = useDeleteRecordMutation();
+  const [open, setOpen] = useState<boolean>(false);
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    try {
+      await deleteMutationAsync(id);
+      toast.success('삭제되었습니다.');
+      setOpen(false);
+      router.push('/');
+    } catch {
+      toast.error('오류가 발생했어요. 다시 시도해 주세요.');
+    }
+  };
 
   return (
     <div className="flex h-full w-full items-center justify-center bg-stone-200">
       <div className="h-150 w-135 rounded-[20px] bg-white p-5">
-        <BookInfoArea recordData={recordData} />
+        <BookInfoArea recordData={recordData} handleOpen={() => setOpen(true)} />
         <hr className="mt-4 text-gray-100" />
         <BookReview review={recordData.review} />
         <BookQuotes quotes={recordData.quotes} />
       </div>
+      <RecordDeleteDialog open={open} close={() => setOpen(false)} onDelete={handleDelete} />
     </div>
   );
 }
 
-function BookInfoArea({ recordData }: { recordData: RecordType }) {
+function BookInfoArea({ recordData, handleOpen }: { recordData: RecordType; handleOpen: () => void }) {
   return (
     <div>
       <div className="my-2 flex gap-4">
@@ -56,7 +76,7 @@ function BookInfoArea({ recordData }: { recordData: RecordType }) {
             </svg>
           </button>
 
-          <button className="h-8.5 w-8.5 cursor-pointer rounded-[9px] border border-zinc-200 p-2">
+          <button className="h-8.5 w-8.5 cursor-pointer rounded-[9px] border border-zinc-200 p-2" onClick={handleOpen}>
             <svg
               width="17"
               height="17"
