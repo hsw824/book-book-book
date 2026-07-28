@@ -13,3 +13,7 @@ export const fetchRecord = (id: string) => {
 export const postRecord = async (data: BookForm) => {
   return http.post<BookForm, BookForm>('/api/records', data);
 };
+
+export const deleteRecord = async (id: string) => {
+  return http.delete(`/api/records/${id}`);
+};
