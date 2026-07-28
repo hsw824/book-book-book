@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export function Dashboard() {
-  const route = useRouter();
+  const router = useRouter();
   const { data: records } = useSuspenseQuery(recordsQueryOption.records());
 
   return (
@@ -19,7 +19,7 @@ export function Dashboard() {
           <div
             key={record.id}
             className="mb-3 flex w-100 translate-y-0 cursor-pointer gap-3 rounded-[20px] border border-solid border-zinc-300 bg-white px-5 py-3 transition-all duration-100 ease-in hover:-translate-y-0.5 hover:shadow-xl"
-            onClick={() => route.push(`/records/${record.id}`)}
+            onClick={() => router.push(`/records/${record.id}`)}
           >
             <Image src={record.book.coverUrl} alt={record.book.title} width={46} height={64} />
             <div className="flex basis-[70%] flex-col">
