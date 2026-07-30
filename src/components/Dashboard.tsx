@@ -12,7 +12,7 @@ export function Dashboard() {
   const { data: records } = useSuspenseQuery(recordsQueryOption.records());
 
   return (
-    <div className="relative h-full w-full bg-stone-200 p-2">
+    <div className="relative h-full w-full overflow-scroll bg-stone-200 p-2">
       <h1 className="mb-8 text-3xl font-bold">내 서재</h1>
       <div className="flex flex-col items-center">
         {records.map(record => (
@@ -36,7 +36,7 @@ export function Dashboard() {
         ))}
       </div>
       <Link
-        className="absolute right-10 bottom-0 flex h-14 w-14 scale-100 items-center justify-center rounded-[50%] border bg-blue-600 text-3xl text-white transition-all duration-100 ease-in hover:scale-105"
+        className="fixed right-10 bottom-3 flex h-14 w-14 scale-100 items-center justify-center rounded-[50%] border bg-blue-600 text-3xl text-white transition-all duration-100 ease-in hover:scale-105"
         href="/records/new"
       >
         +
