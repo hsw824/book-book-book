@@ -11,13 +11,10 @@ export async function GET(request: Request) {
 
   const books = data.documents.map(book => ({
     authors: book.authors.join(','),
-    contents: book.contents,
-    datetime: book.datetime,
+    datetime: new Date(book.datetime).getFullYear(),
     publisher: book.publisher,
     thumbnail: book.thumbnail,
     title: book.title,
-    translators: book.translators.join(','),
-    url: book.url,
     isbn: book.isbn,
   }));
 
