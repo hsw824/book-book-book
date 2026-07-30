@@ -33,7 +33,7 @@ export function RecordDetail({ id }: { id: string }) {
   return (
     <div className="flex h-full w-full items-center justify-center bg-stone-200">
       <div className="h-150 w-135 rounded-[20px] bg-white p-5">
-        <BookInfoArea recordData={recordData} handleOpen={() => setOpen(true)} />
+        <BookInfoArea recordData={recordData} handleOpen={() => setOpen(true)} id={id} />
         <hr className="mt-4 text-gray-100" />
         <BookReview review={recordData.review} />
         <BookQuotes quotes={recordData.quotes} />
@@ -43,7 +43,9 @@ export function RecordDetail({ id }: { id: string }) {
   );
 }
 
-function BookInfoArea({ recordData, handleOpen }: { recordData: RecordType; handleOpen: () => void }) {
+function BookInfoArea({ recordData, handleOpen, id }: { recordData: RecordType; handleOpen: () => void; id: string }) {
+  const router = useRouter();
+
   return (
     <div>
       <div className="my-2 flex gap-4">
@@ -60,7 +62,10 @@ function BookInfoArea({ recordData, handleOpen }: { recordData: RecordType; hand
           <p className="text-[12px] text-zinc-400">{recordData.book.publisher}</p>
         </div>
         <div>
-          <button className="mr-2 h-8.5 w-8.5 cursor-pointer rounded-[9px] border border-zinc-200 p-2">
+          <button
+            className="mr-2 h-8.5 w-8.5 cursor-pointer rounded-[9px] border border-zinc-200 p-2"
+            onClick={() => router.push(`/records/${id}/edit`)}
+          >
             <svg
               width="17"
               height="17"
