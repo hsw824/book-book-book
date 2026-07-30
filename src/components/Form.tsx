@@ -9,10 +9,12 @@ import { Toggle } from './Toggle';
 import { Book } from '@/models/bookTypes';
 import Image from 'next/image';
 import { Control, Controller, useFieldArray, useForm, useFormState } from 'react-hook-form';
-import { useRecordMutation } from '@/hooks/useRecordMutation';
+import { useRecordMutation, useUpdateRecordMutation } from '@/hooks/useRecordMutation';
 import toast from 'react-hot-toast';
 import { Rating, RATINGS } from '@/constant/rate';
 import { Genre, GENRES } from '@/constant/genre';
+import { format } from 'date-fns';
+import { useRouter } from 'next/navigation';
 
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
 
@@ -29,9 +31,8 @@ export type BookForm = {
   isEbook: boolean;
 };
 
-const TODAY_STRING = new Date().toLocaleDateString('sv-SE');
-
-export function Form() {
+export function Form({ editFormData, mode, id }: { editFormData?: BookForm; mode: 'create' | 'edit'; id?: string }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -39,15 +40,17 @@ export function Form() {
     formState: { errors, isValid },
     reset,
   } = useForm<BookForm>({
-    defaultValues: {
-      bookInfo: null,
-      finishedAt: TODAY_STRING,
-      review: '',
-      quotes: [{ page: 0, text: '' }],
-      genre: '소설',
-      rating: null,
-      isEbook: false,
-    },
+    defaultValues: editFormData
+      ? editFormData
+      : {
+          bookInfo: null,
+          finishedAt: format(new Date(), 'yyyy-MM-dd'),
+          review: '',
+          quotes: [{ page: 0, text: '' }],
+          genre: '소설',
+          rating: null,
+          isEbook: false,
+        },
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -55,13 +58,26 @@ export function Form() {
     name: 'quotes',
   });
 
-  const { mutateAsync: recordMutateAsync, isPending } = useRecordMutation();
+  const { mutateAsync: createRecordMutateAsync, isPending: isCreatePending } = useRecordMutation();
+  const { mutateAsync: editRecordMutateAsync, isPending: isEditPending } = useUpdateRecordMutation();
 
-  const onSubmit = (data: BookForm) => {
+  const onSubmit = async (data: BookForm) => {
+    if (mode === 'create') {
+      try {
+        await createRecordMutateAsync(data);
+        toast.success('기록이 완료되었어요!');
+        reset();
+      } catch {
+        toast.error('오류가 발생했어요. 다시 시도해 주세요.');
+      }
+      return;
+    }
+
     try {
-      recordMutateAsync(data);
-      toast.success('기록이 완료되었어요!');
-      reset();
+      if (!id) throw new Error('잘못된 접근입니다.');
+      await editRecordMutateAsync({ id, data });
+      toast.success('수정이 완료되었어요!');
+      router.push(`/records/${id}`);
     } catch {
       toast.error('오류가 발생했어요. 다시 시도해 주세요.');
     }
@@ -73,7 +89,7 @@ export function Form() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <SectionTitle title="책 정보" />
-      <BookSearch control={control} />
+      <BookSearch control={control} isEdit={mode === 'edit'} />
       <hr className="my-6 h-3 w-full text-gray-100" />
 
       <SectionTitle title="기록 정보" />
@@ -154,9 +170,9 @@ export function Form() {
       <button
         type="submit"
         className="we h-12 w-full cursor-pointer rounded-[18px] bg-blue-500 text-[15px] font-semibold text-white disabled:bg-gray-300"
-        disabled={!isValid || isPending}
+        disabled={!isValid || isCreatePending || isEditPending}
       >
-        기록하기
+        {mode === 'create' ? '기록하기' : '수정하기'}
       </button>
     </form>
   );
@@ -188,7 +204,7 @@ function FormField({
   );
 }
 
-function BookSearch({ control }: { control: Control<BookForm> }) {
+function BookSearch({ control, isEdit }: { control: Control<BookForm>; isEdit: boolean }) {
   const { errors } = useFormState({ control, name: 'bookInfo' });
 
   return (
@@ -204,13 +220,14 @@ function BookSearch({ control }: { control: Control<BookForm> }) {
                 <span className="text-[15px] font-semibold">{value.title}</span>
                 <span className="text-[12px]">{value.authors}</span>
                 <span className="text-[12px]">
-                  {value.publisher} · {new Date(value.datetime).getFullYear()}
+                  {value.publisher} · {value.datetime}
                 </span>
               </div>
               <button
                 type="button"
-                className="cursor-pointer rounded-2xl bg-white px-3 py-1.5 text-[12px] text-gray-600"
+                className="cursor-pointer rounded-2xl bg-white px-3 py-1.5 text-[12px] text-gray-600 disabled:bg-zinc-200 disabled:text-zinc-200"
                 onClick={() => onChange(null)}
+                disabled={isEdit}
               >
                 변경
               </button>
