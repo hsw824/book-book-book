@@ -17,3 +17,7 @@ export const postRecord = async (data: BookForm) => {
 export const deleteRecord = async (id: string) => {
   return http.delete(`/api/records/${id}`);
 };
+
+export const updateRecord = async (id: string, data: BookForm) => {
+  return http.put(`/api/records/${id}`, data);
+};
