@@ -8,7 +8,7 @@ interface ShortedBookType {
 
 export interface DetailBookType extends ShortedBookType {
   isbn: string;
-  publishedYear: string;
+  publishedYear: number;
 }
 
 export interface SimpleRecordType {
