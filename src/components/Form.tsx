@@ -169,7 +169,7 @@ export function Form({ editFormData, mode, id }: { editFormData?: BookForm; mode
       </div>
       <button
         type="submit"
-        className="we h-12 w-full cursor-pointer rounded-[18px] bg-blue-500 text-[15px] font-semibold text-white disabled:bg-gray-300"
+        className="h-12 w-full cursor-pointer rounded-[18px] bg-blue-500 text-[15px] font-semibold text-white disabled:bg-gray-300"
         disabled={!isValid || isCreatePending || isEditPending}
       >
         {mode === 'create' ? '기록하기' : '수정하기'}
