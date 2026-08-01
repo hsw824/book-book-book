@@ -1,5 +1,6 @@
 'use client';
 
+import { SimpleRecordType } from '@/models/recordTypes';
 import { recordsQueryOption } from '@/queries/recordsQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -8,8 +9,45 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export function Dashboard() {
-  const router = useRouter();
   const { data: records } = useSuspenseQuery(recordsQueryOption.records());
+
+  if (records.length === 0) {
+    return (
+      <div className="h-full w-full overflow-scroll bg-stone-200 p-2">
+        <h1 className="mb-8 text-3xl font-bold">내 서재</h1>
+        <div className="flex h-[80%] flex-col items-center justify-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-[50%] bg-blue-600/10">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#2f6bdc"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+            </svg>
+          </div>
+          <h2 className="text-[16px] font-bold">아직 기록한 책이 없어요.</h2>
+          <p className="text-[13px] text-gray-600">첫 책을 검색하고 감상을 남겨보세요.</p>
+          <Link
+            className="mt-4.5 flex h-11 items-center justify-center rounded-xl bg-blue-600 px-5 py-0 text-[14px] font-semibold text-white"
+            href="/records/new"
+          >
+            책 기록하기
+          </Link>
+        </div>
+      </div>
+    );
+  }
+  return <DashboardContent records={records} />;
+}
+
+function DashboardContent({ records }: { records: SimpleRecordType[] }) {
+  const router = useRouter();
 
   return (
     <div className="relative h-full w-full overflow-scroll bg-stone-200 p-2">
