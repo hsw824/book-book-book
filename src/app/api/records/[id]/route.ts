@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { TEMP_USER_ID } from '@/lib/constants';
 import z from 'zod';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
+import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+
+  const userId = await getAuthenticatedUserId();
+  if (!userId) {
+    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+  }
 
   const record = await prisma.record.findUnique({
     where: { id },
@@ -19,7 +24,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: '존재하지 않는 기록입니다.' }, { status: 404 });
   }
 
-  if (record.userId !== TEMP_USER_ID) {
+  if (record.userId !== userId) {
     return NextResponse.json({ error: '조회 권한이 없습니다.' }, { status: 403 });
   }
 
@@ -29,6 +34,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
+  const userId = await getAuthenticatedUserId();
+  if (!userId) {
+    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+  }
+
   const record = await prisma.record.findUnique({
     where: { id },
   });
@@ -37,7 +47,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     return NextResponse.json({ error: '존재하지 않는 기록입니다.' }, { status: 404 });
   }
 
-  if (record.userId !== TEMP_USER_ID) {
+  if (record.userId !== userId) {
     return NextResponse.json({ error: '삭제 권한이 없습니다.' }, { status: 403 });
   }
 
@@ -45,8 +55,6 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 
   return NextResponse.json({ success: true }, { status: 200 });
 }
-
-// src/app/api/records/[id]/route.ts에 이어서 추가
 
 const updateSchema = z.object({
   finishedAt: z.string(),
@@ -64,6 +72,12 @@ const updateSchema = z.object({
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+
+  const userId = await getAuthenticatedUserId();
+  if (!userId) {
+    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+  }
+
   const body = await req.json();
   const parsed = updateSchema.safeParse(body);
 
@@ -77,7 +91,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: '존재하지 않는 기록입니다.' }, { status: 404 });
   }
 
-  if (existing.userId !== TEMP_USER_ID) {
+  if (existing.userId !== userId) {
     return NextResponse.json({ error: '수정 권한이 없습니다.' }, { status: 403 });
   }
 

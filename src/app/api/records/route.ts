@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
-import { TEMP_USER_ID } from '@/lib/constants';
+import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
 
 const requestSchema = z.object({
   bookInfo: z.object({
@@ -27,8 +27,13 @@ const requestSchema = z.object({
 });
 
 export async function GET() {
+  const userId = await getAuthenticatedUserId();
+  if (!userId) {
+    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+  }
+
   const records = await prisma.record.findMany({
-    where: { userId: TEMP_USER_ID },
+    where: { userId },
     orderBy: { finishedAt: 'desc' },
     select: {
       id: true,
@@ -52,6 +57,11 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const userId = await getAuthenticatedUserId();
+  if (!userId) {
+    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+  }
+
   const body = await req.json();
   const parsed = requestSchema.safeParse(body);
 
@@ -90,7 +100,7 @@ export async function POST(req: NextRequest) {
 
       return tx.record.create({
         data: {
-          userId: TEMP_USER_ID,
+          userId,
           bookId: book.id,
           category: genreEnum,
           rating,
