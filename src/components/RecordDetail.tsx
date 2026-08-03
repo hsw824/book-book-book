@@ -12,6 +12,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDeleteRecordMutation } from '@/hooks/useRecordMutation';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
+import { ROUTE } from '@/constant/path';
 
 export function RecordDetail({ id }: { id: string }) {
   const { data: recordData } = useSuspenseQuery(recordQueryOption.record(id));
@@ -24,15 +26,18 @@ export function RecordDetail({ id }: { id: string }) {
       await deleteMutationAsync(id);
       toast.success('삭제되었습니다.');
       setOpen(false);
-      router.push('/');
+      router.push(ROUTE.HOME);
     } catch {
       toast.error('오류가 발생했어요. 다시 시도해 주세요.');
     }
   };
 
   return (
-    <div className="flex h-full w-full items-center justify-center bg-stone-200">
+    <div className="flex h-full w-full flex-col items-center justify-center bg-stone-200">
       <div className="h-150 w-135 rounded-[20px] bg-white p-5">
+        <Link href={ROUTE.HOME} className="mb-2 cursor-pointer text-sm text-gray-600">
+          &lt; 목록으로
+        </Link>
         <BookInfoArea recordData={recordData} handleOpen={() => setOpen(true)} id={id} />
         <hr className="mt-4 text-gray-100" />
         <BookReview review={recordData.review} />
