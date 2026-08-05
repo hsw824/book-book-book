@@ -1,5 +1,5 @@
-import { AutoCompleteInput } from "@/components/AutoCompleteInput";
+import { AutoCompleteBook } from '@/components/AutoComplete/AutoCompleteBook';
 
 export default function Home() {
-  return <AutoCompleteInput />;
+  return <AutoCompleteBook />;
 }
