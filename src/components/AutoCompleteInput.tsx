@@ -12,6 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { isNull } from 'es-toolkit';
 import { useState } from 'react';
 import Image from 'next/image';
+import { Glasses } from './icons/Glasses';
 
 export function AutoCompleteInput() {
   const [keyword, setKeyword] = useState('');
@@ -90,18 +91,7 @@ function BookSearchInput({
   return (
     <div className="flex h-11 items-center gap-2.5 rounded-xl border border-solid border-zinc-300 px-3 py-0 shadow-none">
       <span className="shrink-0 grow-0 basis-auto text-zinc-400">
-        <svg
-          width="17"
-          height="17"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        >
-          <circle cx="11" cy="11" r="7"></circle>
-          <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
-        </svg>
+        <Glasses width="17" height="17" strokeWidth="2" />
       </span>
       <input
         placeholder="제목, 저자 검색"
@@ -144,18 +134,7 @@ function BookSearchResult({
     return (
       <div className="flex h-150 flex-col items-center justify-center">
         <span className="mb-1 text-zinc-400 opacity-80">
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-          >
-            <circle cx="11" cy="11" r="7"></circle>
-            <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
-          </svg>
+          <Glasses width="32" height="32" strokeWidth="1.6" />
         </span>
 
         <span className="mb-2 text-[15px] font-semibold text-gray-600">검색 결과가 없어요.</span>
