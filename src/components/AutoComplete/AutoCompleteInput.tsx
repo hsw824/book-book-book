@@ -34,6 +34,10 @@ export function BookSearchInput({ keyword, setKeyword, setSelectedIndex, bookCou
     }
   };
 
+  const handleRemoveButton = () => {
+    setKeyword('');
+  };
+
   return (
     <div className="flex h-11 items-center gap-2.5 rounded-xl border border-solid border-zinc-300 px-3 py-0 shadow-none">
       <span className="shrink-0 grow-0 basis-auto text-zinc-400">
@@ -49,7 +53,11 @@ export function BookSearchInput({ keyword, setKeyword, setSelectedIndex, bookCou
         onFocus={onFocus}
         onBlur={onBlur}
       />
-      <button className="h-5.5 w-5.5 cursor-pointer rounded-[11px] border-none bg-gray-100 text-[11px] text-gray-600">
+      <button
+        type="button"
+        className="h-5.5 w-5.5 cursor-pointer rounded-[11px] border-none bg-gray-100 text-[11px] text-gray-600"
+        onClick={handleRemoveButton}
+      >
         x
       </button>
     </div>
