@@ -1,9 +1,9 @@
-import { Book } from '@/models/bookTypes';
+import { SummaryBook } from '@/models/bookTypes';
 import Image from 'next/image';
 import { Glasses } from '../icons/Glasses';
 
 interface Props {
-  books: Book[] | undefined;
+  books: SummaryBook[] | undefined;
   selectedIndex: null | number;
   isInputFocused: boolean;
   keyword: string;
@@ -51,7 +51,7 @@ function BookResultContent({
   isInputFocused,
   selectedIndex,
 }: {
-  books: Book[];
+  books: SummaryBook[];
   isInputFocused: boolean;
   selectedIndex: null | number;
 }) {

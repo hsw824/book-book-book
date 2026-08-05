@@ -22,7 +22,7 @@ export interface KakaoBookResponese {
   };
 }
 
-export interface Book {
+export interface SummaryBook {
   authors: string;
   contents: string;
   datetime: string;
