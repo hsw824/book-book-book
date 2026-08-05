@@ -6,45 +6,15 @@ import { useState } from 'react';
 import { AutoCompleteInput } from './AutoCompleteInput';
 import { isNull } from 'es-toolkit';
 import { Toggle } from './Toggle';
-import { Book } from '@/models/bookTypes';
 import Image from 'next/image';
 import { Control, Controller, useFieldArray, useForm, useFormState } from 'react-hook-form';
 import { useRecordMutation } from '@/hooks/useRecordMutation';
 import toast from 'react-hot-toast';
+import { GENRES } from '@/constants/genre';
+import { BookRecordForm } from '@/models/recordTypes';
+import { Rating, RATINGS } from '@/constants/rate';
 
-const GENRES = [
-  '소설',
-  '시·희곡',
-  '에세이·산문',
-  '인문·철학',
-  '사회·정치',
-  '역사',
-  '과학·기술',
-  '경제·경영',
-  '자기계발',
-  '예술·대중문화',
-  '종교',
-  '기타',
-] as const;
-
-type Genre = (typeof GENRES)[number];
-
-const RATINGS = [1, 2, 3, 4, 5] as const;
-type Rating = (typeof RATINGS)[number];
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
-
-export type BookForm = {
-  bookInfo: Book | null;
-  finishedAt: string;
-  review: string;
-  quotes: {
-    page: number;
-    text: string;
-  }[];
-  genre: Genre;
-  rating: Rating | null;
-  isEbook: boolean;
-};
 
 const TODAY_STRING = new Date().toLocaleDateString('sv-SE');
 
@@ -55,7 +25,7 @@ export function Form() {
     control,
     formState: { errors, isValid },
     reset,
-  } = useForm<BookForm>({
+  } = useForm<BookRecordForm>({
     defaultValues: {
       bookInfo: null,
       finishedAt: TODAY_STRING,
@@ -74,7 +44,7 @@ export function Form() {
 
   const { mutateAsync: recordMutateAsync, isPending } = useRecordMutation();
 
-  const onSubmit = (data: BookForm) => {
+  const onSubmit = (data: BookRecordForm) => {
     try {
       recordMutateAsync(data);
       toast.success('기록이 완료되었어요!');
@@ -205,7 +175,7 @@ function FormField({
   );
 }
 
-function BookSearch({ control }: { control: Control<BookForm> }) {
+function BookSearch({ control }: { control: Control<BookRecordForm> }) {
   const { errors } = useFormState({ control, name: 'bookInfo' });
 
   return (
@@ -244,7 +214,7 @@ function BookSearch({ control }: { control: Control<BookForm> }) {
   );
 }
 
-function RatingFiled({ control }: { control: Control<BookForm> }) {
+function RatingFiled({ control }: { control: Control<BookRecordForm> }) {
   const { errors } = useFormState({ control, name: 'rating' });
   const [hoverRating, setHoverRating] = useState<null | Rating>(null);
 
