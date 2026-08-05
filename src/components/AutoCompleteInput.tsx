@@ -16,19 +16,19 @@ import Image from 'next/image';
 export function AutoCompleteInput() {
   const [keyword, setKeyword] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
-  const [isFocused, setIsFocused] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const debouncedKeyword = useSearchDebounce(keyword, 400);
 
   const { data: books } = useQuery(bookQueryOption.books(debouncedKeyword));
 
   const handleFocus = () => {
-    setIsFocused(true);
+    setIsInputFocused(true);
     setSelectedIndex(null);
   };
 
   const handleBlur = () => {
-    setIsFocused(false);
+    setIsInputFocused(false);
     setSelectedIndex(null);
   };
 
@@ -42,8 +42,8 @@ export function AutoCompleteInput() {
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      {isFocused && (
-        <BookSearchResult books={books} selectedIndex={selectedIndex} isFocused={isFocused} keyword={keyword} />
+      {isInputFocused && (
+        <BookSearchResult books={books} selectedIndex={selectedIndex} isFocused={isInputFocused} keyword={keyword} />
       )}
     </div>
   );
