@@ -4,7 +4,6 @@ import { recordQueryOption } from '@/queries/recordQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import Image from 'next/image';
-
 import Link from 'next/link';
 
 export function Dashboard() {
