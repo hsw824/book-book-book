@@ -15,6 +15,8 @@ import { Rating, RATINGS } from '@/constant/rate';
 import { Genre, GENRES } from '@/constant/genre';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
+import { ROUTE } from '@/constant/path';
+import Link from 'next/link';
 
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
 
@@ -83,81 +85,87 @@ export function Form({ editFormData, mode, id }: { editFormData?: BookForm; mode
     }
   };
 
+  const moveToHref = mode === 'create' ? ROUTE.HOME : `/records/${id}`;
+
   return (
-    <form
-      className="mx-auto h-300 w-200 rounded-[18px] border border-solid border-zinc-200 p-10"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <SectionTitle title="책 정보" />
-      <BookSearch control={control} isEdit={mode === 'edit'} />
-      <hr className="my-6 h-3 w-full text-gray-100" />
+    <div className="flex h-full w-full flex-col items-center justify-center bg-stone-200">
+      <form
+        className="h-200 w-150 overflow-scroll rounded-[18px] border border-solid border-zinc-200 bg-white px-10 py-5"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Link className="mb-2 cursor-pointer text-sm text-gray-600" href={moveToHref}>
+          &lt; 뒤로가기
+        </Link>
+        <SectionTitle title="책 정보" />
+        <BookSearch control={control} isEdit={mode === 'edit'} />
+        <hr className="my-6 h-3 w-full text-gray-100" />
 
-      <SectionTitle title="기록 정보" />
-      <FormField title="장르" isRequired htmlFor="genres">
-        <select
-          id="genres"
-          className="mb-2 w-full cursor-pointer rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-sm outline-none"
-          {...register('genre')}
-        >
-          {GENRES.map(genre => (
-            <option key={genre}>{genre}</option>
+        <SectionTitle title="기록 정보" />
+        <FormField title="장르" isRequired htmlFor="genres">
+          <select
+            id="genres"
+            className="mb-2 w-full cursor-pointer rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-sm outline-none"
+            {...register('genre')}
+          >
+            {GENRES.map(genre => (
+              <option key={genre}>{genre}</option>
+            ))}
+          </select>
+        </FormField>
+
+        <FormField title="다 읽은 날짜" isRequired htmlFor="finishedAt">
+          <input
+            id="finishedAt"
+            type="date"
+            className="mb-2 w-full cursor-pointer rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-sm outline-none"
+            {...register('finishedAt', { required: '다 읽은 날짜를 입력해주세요.' })}
+          />
+          {errors.finishedAt && <span className="text-sm text-red-600">{errors.finishedAt.message}</span>}
+        </FormField>
+
+        <RatingFiled control={control} />
+
+        <FormField title="감상" isRequired htmlFor="review">
+          <textarea
+            id="review"
+            placeholder="한줄평부터 자세한 감상까지 자유롭게 남겨보세요!"
+            className="w-full resize-none rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-[14.5px] outline-none"
+            {...register('review', { required: '감상을 입력해주세요.' })}
+          />
+          {errors.review && <span className="text-sm text-red-600">{errors.review.message}</span>}
+        </FormField>
+
+        <FormField title="필사하고 싶은 구절">
+          {fields.map((filed, index) => (
+            <div key={filed.id} className="mb-2 flex rounded-[18px] border border-solid border-zinc-200">
+              <p className="flex basis-[4%] items-center justify-center text-[12px] text-neutral-800">P.</p>
+              <input
+                className="basis-[6%] border-r border-zinc-200 p-2 text-[12px] text-neutral-800 outline-none"
+                type="number"
+                {...register(`quotes.${index}.page`, { valueAsNumber: true })}
+              />
+              <textarea
+                className={`${fields.length > 1 ? 'basis-[85%] border-r border-zinc-200' : 'basis-[90%]'} resize-none p-2 text-sm outline-none`}
+                placeholder="마음에 남는 문장을 옮겨보세요"
+                {...register(`quotes.${index}.text`)}
+              />
+              {fields.length > 1 && (
+                <button
+                  className="flex basis-[5%] cursor-pointer items-center justify-center text-neutral-800"
+                  onClick={() => remove(index)}
+                  type="button"
+                >
+                  x
+                </button>
+              )}
+            </div>
           ))}
-        </select>
-      </FormField>
-
-      <FormField title="다 읽은 날짜" isRequired htmlFor="finishedAt">
-        <input
-          id="finishedAt"
-          type="date"
-          className="mb-2 w-full cursor-pointer rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-sm outline-none"
-          {...register('finishedAt', { required: '다 읽은 날짜를 입력해주세요.' })}
-        />
-        {errors.finishedAt && <span className="text-sm text-red-600">{errors.finishedAt.message}</span>}
-      </FormField>
-
-      <RatingFiled control={control} />
-
-      <FormField title="감상" isRequired htmlFor="review">
-        <textarea
-          id="review"
-          placeholder="한줄평부터 자세한 감상까지 자유롭게 남겨보세요!"
-          className="w-full resize-none rounded-[18px] border border-solid border-zinc-200 px-3.25 py-2.75 text-[14.5px] outline-none"
-          {...register('review', { required: '감상을 입력해주세요.' })}
-        />
-        {errors.review && <span className="text-sm text-red-600">{errors.review.message}</span>}
-      </FormField>
-
-      <FormField title="필사하고 싶은 구절">
-        {fields.map((filed, index) => (
-          <div key={filed.id} className="mb-2 flex rounded-[18px] border border-solid border-zinc-200">
-            <p className="flex basis-[4%] items-center justify-center text-[12px] text-neutral-800">P.</p>
-            <input
-              className="basis-[6%] border-r border-zinc-200 p-2 text-[12px] text-neutral-800 outline-none"
-              type="number"
-              {...register(`quotes.${index}.page`, { valueAsNumber: true })}
-            />
-            <textarea
-              className={`${fields.length > 1 ? 'basis-[85%] border-r border-zinc-200' : 'basis-[90%]'} resize-none p-2 text-sm outline-none`}
-              placeholder="마음에 남는 문장을 옮겨보세요"
-              {...register(`quotes.${index}.text`)}
-            />
-            {fields.length > 1 && (
-              <button
-                className="flex basis-[5%] cursor-pointer items-center justify-center text-neutral-800"
-                onClick={() => remove(index)}
-                type="button"
-              >
-                x
-              </button>
-            )}
-          </div>
-        ))}
-        <button type="button" onClick={() => append({ text: '', page: 0 })} className="mb-2 cursor-pointer">
-          <p className="text-[13px] text-blue-600">
-            <span>+</span> 구절 추가
-          </p>
-        </button>
-      </FormField>
+          <button type="button" onClick={() => append({ text: '', page: 0 })} className="mb-2 cursor-pointer">
+            <p className="text-[13px] text-blue-600">
+              <span>+</span> 구절 추가
+            </p>
+          </button>
+        </FormField>
 
       <div className="mb-2 flex items-center gap-2">
         <Controller
