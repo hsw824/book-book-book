@@ -19,7 +19,7 @@ export interface RecordListItem {
   book: ShortedBook;
 }
 
-interface Quote {
+export interface Quote {
   page: number;
   text: string;
 }
