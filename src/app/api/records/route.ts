@@ -10,7 +10,7 @@ const requestSchema = z.object({
     title: z.string().min(1),
     authors: z.string(),
     publisher: z.string(),
-    datetime: z.string(),
+    datetime: z.number(),
     thumbnail: z.string().optional(),
   }),
   finishedAt: z.string(),

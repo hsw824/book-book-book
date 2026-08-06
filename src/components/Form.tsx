@@ -167,23 +167,22 @@ export function Form({ editFormData, mode, id }: { editFormData?: BookForm; mode
           </button>
         </FormField>
 
-        <div className="mb-2 flex items-center gap-2">
-          <Controller
-            control={control}
-            name="isEbook"
-            render={({ field: { onChange, value } }) => <Toggle toggle={value} setToggle={onChange} />}
-          />
-          <span className="text-sm"> 이책은 ebook으로 읽었어요</span>
-        </div>
-        <button
-          type="submit"
-          className="we h-12 w-full cursor-pointer rounded-[18px] bg-blue-500 text-[15px] font-semibold text-white disabled:bg-gray-300"
-          disabled={!isValid || isCreatePending || isEditPending}
-        >
-          {mode === 'create' ? '기록하기' : '수정하기'}
-        </button>
-      </form>
-    </div>
+      <div className="mb-2 flex items-center gap-2">
+        <Controller
+          control={control}
+          name="isEbook"
+          render={({ field: { onChange, value } }) => <Toggle toggle={value} setToggle={onChange} />}
+        />
+        <span className="text-sm"> 이책은 ebook으로 읽었어요</span>
+      </div>
+      <button
+        type="submit"
+        className="h-12 w-full cursor-pointer rounded-[18px] bg-blue-500 text-[15px] font-semibold text-white disabled:bg-gray-300"
+        disabled={!isValid || isCreatePending || isEditPending}
+      >
+        {mode === 'create' ? '기록하기' : '수정하기'}
+      </button>
+    </form>
   );
 }
 
