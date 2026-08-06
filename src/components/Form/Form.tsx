@@ -13,8 +13,9 @@ import { EbookField } from './EbookField';
 import { FinishedAtField } from './FinishedAtField';
 import { ReviewField } from './ReviewField';
 import { QuotesField } from './QuotesField';
+import { format } from 'date-fns';
 
-const TODAY_STRING = new Date().toLocaleDateString('sv-SE');
+const TODAY = format(new Date(), 'yyyy-MM-dd');
 
 export function Form() {
   const {
@@ -26,7 +27,7 @@ export function Form() {
   } = useForm<BookRecordForm>({
     defaultValues: {
       bookInfo: null,
-      finishedAt: TODAY_STRING,
+      finishedAt: TODAY,
       review: '',
       quotes: [{ page: 0, text: '' }],
       genre: '소설',
