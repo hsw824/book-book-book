@@ -6,18 +6,18 @@ import { useRecordMutation } from '@/hooks/useRecordMutation';
 import toast from 'react-hot-toast';
 import { BookRecordForm } from '@/models/recordTypes';
 import { SectionTitle } from './SectionTitle';
-import { BookSearchField } from './BookSearchField';
-import { RatingField } from './RatingField';
-import { GenreField } from './GenreField';
-import { EbookField } from './EbookField';
-import { FinishedAtField } from './FinishedAtField';
-import { ReviewField } from './ReviewField';
-import { QuotesField } from './QuotesField';
+import { BookSearchField } from './field/BookSearchField';
+import { RatingField } from './field/RatingField';
+import { GenreField } from './field/GenreField';
+import { EbookField } from './field/EbookField';
+import { FinishedAtField } from './field/FinishedAtField';
+import { ReviewField } from './field/ReviewField';
+import { QuotesField } from './field/QuotesField';
 import { format } from 'date-fns';
 
 const TODAY = format(new Date(), 'yyyy-MM-dd');
 
-export function Form() {
+export function RecordForm() {
   const {
     register,
     handleSubmit,

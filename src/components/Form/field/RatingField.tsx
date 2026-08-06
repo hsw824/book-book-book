@@ -1,10 +1,10 @@
 import { Control, Controller, useFormState } from 'react-hook-form';
-import { FormField } from './FormField';
+import { FormField } from '../FormField';
 import { isNull } from 'es-toolkit';
 import { Rating, RATINGS } from '@/constants/rate';
 import { BookRecordForm } from '@/models/recordTypes';
 import { useState } from 'react';
-import { Star } from '../icons/Star';
+import { Star } from '../../icons/Star';
 
 const RATING_TEXTS = ['별로예요', '아쉬워요', '보통이에요', '좋아요', '최고예요'];
 

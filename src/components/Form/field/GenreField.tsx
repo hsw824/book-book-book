@@ -1,5 +1,5 @@
 import { GENRES } from '@/constants/genre';
-import { FormField } from './FormField';
+import { FormField } from '../FormField';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
 export function GenreField({ register }: { register: UseFormRegisterReturn }) {

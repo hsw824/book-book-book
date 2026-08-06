@@ -1,9 +1,9 @@
 import { BookRecordForm } from '@/models/recordTypes';
 import { Control, Controller, useFormState } from 'react-hook-form';
-import { FormField } from './FormField';
 import Image from 'next/image';
-import { AutoCompleteInput } from '../AutoCompleteInput';
+import { AutoCompleteInput } from '../../AutoCompleteInput';
 import { Book } from '@/models/bookTypes';
+import { FormField } from '../FormField';
 
 export function BookSearchField({ control }: { control: Control<BookRecordForm> }) {
   const { errors } = useFormState({ control, name: 'bookInfo' });

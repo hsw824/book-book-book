@@ -1,5 +1,5 @@
 import { Control, UseFormRegisterReturn, useFormState } from 'react-hook-form';
-import { FormField } from './FormField';
+import { FormField } from '../FormField';
 import { BookRecordForm } from '@/models/recordTypes';
 
 export function ReviewField({
