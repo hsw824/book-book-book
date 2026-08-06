@@ -1,5 +1,5 @@
 import { RecordListItem, BookRecordForm } from '@/models/recordTypes';
-import { http } from '@/utils/axios';
+import { http } from '@/utils/http';
 
 export const fetchRecords = () => {
   return http.get<RecordListItem[]>('/api/records');
