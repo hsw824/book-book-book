@@ -2,7 +2,7 @@ import { Genre } from '@/constants/genre';
 import { Rating } from '@/constants/rate';
 import { Book } from '@/models/bookTypes';
 
-interface ShortedBook {
+interface SummaryBook {
   id: string;
   title: string;
   author: string;
@@ -16,7 +16,7 @@ export interface RecordListItem {
   category: string;
   isEbook: boolean;
   finishedAt: string;
-  book: ShortedBook;
+  book: SummaryBook;
 }
 
 export interface Quote {
