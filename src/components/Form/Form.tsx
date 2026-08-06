@@ -38,9 +38,9 @@ export function Form() {
 
   const { mutateAsync: recordMutateAsync, isPending } = useRecordMutation();
 
-  const onSubmit = (data: BookRecordForm) => {
+  const onSubmit = async (data: BookRecordForm) => {
     try {
-      recordMutateAsync(data);
+      await recordMutateAsync(data);
       toast.success('기록이 완료되었어요!');
       reset();
     } catch {
