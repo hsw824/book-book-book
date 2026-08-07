@@ -1,4 +1,4 @@
-import { EditRecordForm } from '@/components/EditRecordForm';
+import { EditRecordForm } from '@/components/form/EditRecordForm';
 import { ErrorSection } from '@/components/error/ErrorSection';
 import { EditRecordFormSkeleton } from '@/components/skeleton/EditRecordFormSkeleton';
 import { Suspense } from 'react';
