@@ -1,9 +1,9 @@
 import { BookRecordForm } from '@/models/recordTypes';
 import { Control, Controller, useFormState } from 'react-hook-form';
 import Image from 'next/image';
-import { AutoCompleteInput } from '../../AutoCompleteInput';
-import { Book } from '@/models/bookTypes';
+import { SummaryBook } from '@/models/bookTypes';
 import { FormField } from '../FormField';
+import { AutoCompleteBook } from '@/components/AutoComplete/AutoCompleteBook';
 
 interface Props {
   control: Control<BookRecordForm>;
@@ -22,7 +22,7 @@ export function BookSearchField({ control, isEdit }: Props) {
           return value ? (
             <SelectedBookContent value={value} onChange={onChange} isEdit={isEdit} />
           ) : (
-            <AutoCompleteInput onChange={onChange} />
+            <AutoCompleteBook onChange={onChange} />
           );
         }}
         rules={{ required: '읽은 책을 입력해 주세요.' }}
@@ -38,7 +38,7 @@ function SelectedBookContent({
   onChange,
   isEdit,
 }: {
-  value: Book;
+  value: SummaryBook;
   onChange: (...event: null[]) => void;
   isEdit: boolean;
 }) {

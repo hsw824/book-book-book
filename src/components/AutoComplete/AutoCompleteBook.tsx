@@ -11,8 +11,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { BookSearchInput } from './AutoCompleteInput';
 import { AutoCompleteResult } from './AutoCompleteResult';
+import { SummaryBook } from '@/models/bookTypes';
 
-export function AutoCompleteBook() {
+export function AutoCompleteBook({ onChange }: { onChange: (book: SummaryBook) => void }) {
   const [keyword, setKeyword] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -32,7 +33,7 @@ export function AutoCompleteBook() {
   };
 
   return (
-    <div className="mx-auto my-0 w-105 rounded-[18px] border border-solid border-zinc-200 p-3.5">
+    <div className="relative rounded-[18px] border border-solid border-zinc-200 p-3.5">
       <BookSearchInput
         keyword={keyword}
         setKeyword={setKeyword}
@@ -42,12 +43,7 @@ export function AutoCompleteBook() {
         onBlur={handleBlur}
       />
       {isInputFocused && (
-        <AutoCompleteResult
-          books={books}
-          selectedIndex={selectedIndex}
-          isInputFocused={isInputFocused}
-          keyword={keyword}
-        />
+        <AutoCompleteResult books={books} selectedIndex={selectedIndex} keyword={keyword} onChange={onChange} />
       )}
     </div>
   );
