@@ -1,7 +1,7 @@
 'use client';
 
-import { GENRE_MAP } from '@/constant/genre';
-import { RATINGS } from '@/constant/rate';
+import { GENRE_MAP } from '@/constants/genre';
+import { RATINGS } from '@/constants/rate';
 import { QuoteType, RecordType } from '@/models/recordTypes';
 import { recordQueryOption } from '@/queries/recordQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useDeleteRecordMutation } from '@/hooks/useRecordMutation';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { ROUTE } from '@/constant/path';
+import { ROUTE } from '@/constants/path';
 
 export function RecordDetail({ id }: { id: string }) {
   const { data: recordData } = useSuspenseQuery(recordQueryOption.record(id));

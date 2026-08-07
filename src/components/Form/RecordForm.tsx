@@ -15,7 +15,7 @@ import { ReviewField } from './field/ReviewField';
 import { QuotesField } from './field/QuotesField';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
-import { ROUTE } from '@/constant/path';
+import { ROUTE } from '@/constants/path';
 import Link from 'next/link';
 
 interface Props {
