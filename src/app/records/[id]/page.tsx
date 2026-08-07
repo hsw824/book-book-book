@@ -1,12 +1,12 @@
-'use client';
-
-import { Dashboard } from '@/components/Dashboard';
 import { ErrorSection } from '@/components/error/ErrorSection';
-import { HomeSkeleton } from '@/components/skeleton/HomeSkeleton';
+import { RecordDetail } from '@/components/RecordDetail';
+import { RecordDetailSkeleton } from '@/components/skeleton/RecordDetailSkeleton';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-export default function Home() {
+export default async function DetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
   return (
     <ErrorBoundary
       fallback={
@@ -20,8 +20,8 @@ export default function Home() {
         />
       }
     >
-      <Suspense fallback={<HomeSkeleton />}>
-        <Dashboard />
+      <Suspense fallback={<RecordDetailSkeleton />}>
+        <RecordDetail id={id} />
       </Suspense>
     </ErrorBoundary>
   );

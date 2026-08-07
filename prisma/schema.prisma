@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Genre {
+  NOVEL
+  POETRY_DRAMA
+  ESSAY
+  HUMANITIES
+  SOCIETY
+  HISTORY
+  SCIENCE_TECH
+  ECONOMY_BUSINESS
+  SELF_HELP
+  ART_CULTURE
+  RELIGION
+  ETC
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String?   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  records      Record[]
+
+  @@map("users")
+}
+
+model Book {
+  id            String   @id @default(uuid())
+  isbn          String
+  title         String
+  author        String
+  publisher     String
+  publishedYear Int?     @map("published_year")
+  coverUrl      String?  @map("cover_url")
+
+  records       Record[]
+
+  @@index([isbn])
+  @@map("books")
+}
+
+model Record {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  bookId     String   @map("book_id")
+
+  category   Genre
+  rating     Int
+  review     String   @db.Text
+  isEbook    Boolean  @map("is_ebook")
+  finishedAt DateTime @map("finished_at") @db.Date
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book       Book     @relation(fields: [bookId], references: [id], onDelete: Restrict)
+  quotes     Quote[]
+
+  @@index([userId])
+  @@index([bookId])
+  @@map("records")
+}
+
+model Quote {
+  id       String @id @default(uuid())
+  recordId String @map("record_id")
+  page     Int
+  text     String @db.Text
+  order    Int    @default(0)
+
+  record   Record @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
+  @@index([recordId])
+  @@map("quotes")
+}

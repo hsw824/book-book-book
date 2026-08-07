@@ -24,12 +24,9 @@ export interface KakaoBookResponese {
 
 export interface SummaryBook {
   authors: string;
-  contents: string;
-  datetime: string;
+  datetime: number;
   publisher: string;
   thumbnail: string;
   title: string;
-  translators: string;
-  url: string;
   isbn: string;
 }
