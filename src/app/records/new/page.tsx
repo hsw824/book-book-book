@@ -1,5 +1,5 @@
-import { Form } from '@/components/Form';
+import { RecordForm } from '@/components/form/RecordForm';
 
 export default function New() {
-  return <Form mode="create" />;
+  return <RecordForm mode="create" />;
 }

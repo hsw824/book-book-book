@@ -3,12 +3,13 @@ import { recordQueryOption } from '@/queries/recordQuery';
 import { recordsQueryOption } from '@/queries/recordsQuery';
 import { deleteRecord, postRecord, updateRecord } from '@/services/record';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { BookRecordForm } from '@/models/recordTypes';
 
-export const useRecordMutation = () => {
+export const useCreateRecordMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (bookInfo: BookForm) => postRecord(bookInfo),
+    mutationFn: (bookInfo: BookRecordForm) => postRecord(bookInfo),
     onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: recordsQueryOption.records().queryKey });
     },
@@ -25,7 +26,6 @@ export const useDeleteRecordMutation = () => {
     },
   });
 };
-
 export const useUpdateRecordMutation = () => {
   const queryClient = useQueryClient();
 

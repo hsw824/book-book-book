@@ -1,4 +1,8 @@
-interface ShortedBookType {
+import { Genre } from '@/constants/genre';
+import { Rating } from '@/constants/rate';
+import { Book } from '@/models/bookTypes';
+
+interface SummaryBook {
   id: string;
   title: string;
   author: string;
@@ -6,19 +10,34 @@ interface ShortedBookType {
   publisher: string;
 }
 
-export interface DetailBookType extends ShortedBookType {
+export interface DetailBookType extends SummaryBook {
   isbn: string;
   publishedYear: number;
 }
 
-export interface SimpleRecordType {
+export interface RecordListItem {
   id: string;
   rating: number;
   category: string;
   isEbook: boolean;
   finishedAt: string;
-  book: ShortedBookType;
+  book: SummaryBook;
 }
+
+export interface Quote {
+  page: number;
+  text: string;
+}
+
+export type BookRecordForm = {
+  bookInfo: Book | null;
+  finishedAt: string;
+  review: string;
+  quotes: Quote[];
+  genre: Genre;
+  rating: Rating | null;
+  isEbook: boolean;
+};
 
 export interface QuoteType {
   id: string;
