@@ -1,16 +1,16 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { BookForm, Form } from './Form';
 import { recordQueryOption } from '@/queries/recordQuery';
-import { RecordType } from '@/models/recordTypes';
+import { BookRecordForm, RecordType } from '@/models/recordTypes';
 import { GENRE_MAP } from '@/constant/genre';
 import { Rating } from '@/constant/rate';
 import { format } from 'date-fns';
+import { RecordForm } from './form/RecordForm';
 
 export function EditRecordForm({ id }: { id: string }) {
   const { data: recordData } = useSuspenseQuery(recordQueryOption.record(id));
-  const toFormRecordData = (recordData: RecordType): BookForm => {
+  const toFormRecordData = (recordData: RecordType): BookRecordForm => {
     return {
       bookInfo: {
         authors: recordData.book.author,
@@ -30,5 +30,5 @@ export function EditRecordForm({ id }: { id: string }) {
   };
   const formRecordData = toFormRecordData(recordData);
 
-  return <Form editFormData={formRecordData} mode="edit" id={id} />;
+  return <RecordForm editFormData={formRecordData} mode="edit" id={id} />;
 }
