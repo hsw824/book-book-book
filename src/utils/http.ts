@@ -12,4 +12,11 @@ export const http = {
     const result = await axios.post<Response>(url, data);
     return result.data;
   },
+  delete: async function remove(url: string) {
+    await axios.delete(url);
+  },
+  put: async function put<Request = unknown, Response = unknown>(url: string, data: Request) {
+    const result = await axios.put<Response>(url, data);
+    return result.data;
+  },
 };

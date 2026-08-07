@@ -5,7 +5,12 @@ import { AutoCompleteInput } from '../../AutoCompleteInput';
 import { Book } from '@/models/bookTypes';
 import { FormField } from '../FormField';
 
-export function BookSearchField({ control }: { control: Control<BookRecordForm> }) {
+interface Props {
+  control: Control<BookRecordForm>;
+  isEdit: boolean;
+}
+
+export function BookSearchField({ control, isEdit }: Props) {
   const { errors } = useFormState({ control, name: 'bookInfo' });
 
   return (
@@ -15,7 +20,7 @@ export function BookSearchField({ control }: { control: Control<BookRecordForm> 
         name="bookInfo"
         render={({ field: { onChange, value } }) => {
           return value ? (
-            <SelectedBookContent value={value} onChange={onChange} />
+            <SelectedBookContent value={value} onChange={onChange} isEdit={isEdit} />
           ) : (
             <AutoCompleteInput onChange={onChange} />
           );
@@ -28,7 +33,15 @@ export function BookSearchField({ control }: { control: Control<BookRecordForm> 
   );
 }
 
-function SelectedBookContent({ value, onChange }: { value: Book; onChange: (...event: null[]) => void }) {
+function SelectedBookContent({
+  value,
+  onChange,
+  isEdit,
+}: {
+  value: Book;
+  onChange: (...event: null[]) => void;
+  isEdit: boolean;
+}) {
   return (
     <div className="flex items-start gap-3.5 rounded-xl bg-zinc-200 px-4 py-3.5">
       <Image src={value.thumbnail} alt="책 사진" width={46} height={64} className="rounded-[3px]" />
@@ -41,8 +54,9 @@ function SelectedBookContent({ value, onChange }: { value: Book; onChange: (...e
       </div>
       <button
         type="button"
-        className="cursor-pointer rounded-2xl bg-white px-3 py-1.5 text-[12px] text-gray-600"
+        className="cursor-pointer rounded-2xl bg-white px-3 py-1.5 text-[12px] text-gray-600 disabled:bg-zinc-200 disabled:text-zinc-200"
         onClick={() => onChange(null)}
+        disabled={isEdit}
       >
         변경
       </button>

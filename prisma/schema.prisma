@@ -27,7 +27,7 @@ enum Genre {
 model User {
   id           String   @id @default(uuid())
   email        String   @unique
-  passwordHash String   @map("password_hash")
+  passwordHash String?   @map("password_hash")
   createdAt    DateTime @default(now()) @map("created_at")
 
   records      Record[]

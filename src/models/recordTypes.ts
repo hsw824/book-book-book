@@ -10,6 +10,11 @@ interface SummaryBook {
   publisher: string;
 }
 
+export interface DetailBookType extends SummaryBook {
+  isbn: string;
+  publishedYear: number;
+}
+
 export interface RecordListItem {
   id: string;
   rating: number;
@@ -33,3 +38,26 @@ export type BookRecordForm = {
   rating: Rating | null;
   isEbook: boolean;
 };
+
+export interface QuoteType {
+  id: string;
+  recordId: string;
+  page: number;
+  text: string;
+  order: number;
+}
+
+export interface RecordType {
+  id: string;
+  userId: string;
+  bookId: string;
+  category: string;
+  rating: number;
+  review: string;
+  isEbook: boolean;
+  finishedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  book: DetailBookType;
+  quotes: QuoteType[];
+}

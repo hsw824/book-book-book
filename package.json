@@ -14,14 +14,18 @@
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "@tanstack/react-query": "^5.101.0",
+    "@tanstack/react-query-devtools": "^5.101.4",
     "axios": "^1.17.0",
     "date-fns": "^4.4.0",
     "es-toolkit": "^1.48.1",
     "next": "16.2.7",
+    "next-auth": "5.0.0-beta.32",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-error-boundary": "^6.1.2",
     "react-hook-form": "^7.82.0",
     "react-hot-toast": "^2.6.0",
+    "react-loading-skeleton": "^3.5.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

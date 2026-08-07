@@ -1,12 +1,12 @@
-'use client';
-
-import { Dashboard } from '@/components/Dashboard';
+import { EditRecordForm } from '@/components/EditRecordForm';
 import { ErrorSection } from '@/components/error/ErrorSection';
-import { HomeSkeleton } from '@/components/skeleton/HomeSkeleton';
+import { EditRecordFormSkeleton } from '@/components/skeleton/EditRecordFormSkeleton';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-export default function Home() {
+export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+
   return (
     <ErrorBoundary
       fallback={
@@ -20,8 +20,8 @@ export default function Home() {
         />
       }
     >
-      <Suspense fallback={<HomeSkeleton />}>
-        <Dashboard />
+      <Suspense fallback={<EditRecordFormSkeleton />}>
+        <EditRecordForm id={id} />
       </Suspense>
     </ErrorBoundary>
   );
