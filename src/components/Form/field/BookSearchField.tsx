@@ -3,7 +3,7 @@ import { Control, Controller, useFormState } from 'react-hook-form';
 import Image from 'next/image';
 import { SummaryBook } from '@/models/bookTypes';
 import { FormField } from '../FormField';
-import { AutoCompleteBook } from '@/components/AutoComplete/AutoCompleteBook';
+import { AutoCompleteBook } from '@/components/autoComplete/AutoCompleteBook';
 
 interface Props {
   control: Control<BookRecordForm>;
