@@ -107,9 +107,10 @@ export async function POST(req: NextRequest) {
           isEbook,
           finishedAt: new Date(finishedAt),
           quotes: {
-            create: validQuotes.map(q => ({
+            create: validQuotes.map((q, index) => ({
               page: q.page,
               text: q.text,
+              order: index,
             })),
           },
         },

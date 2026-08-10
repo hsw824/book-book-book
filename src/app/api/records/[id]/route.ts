@@ -116,7 +116,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         isEbook,
         finishedAt: new Date(finishedAt),
         quotes: {
-          create: validQuotes.map(q => ({ page: q.page, text: q.text })),
+          create: validQuotes.map((q, index) => ({ page: q.page, text: q.text, order: index })),
         },
       },
       include: { quotes: true, book: true },
