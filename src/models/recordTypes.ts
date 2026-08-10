@@ -5,7 +5,7 @@ import { Book } from '@/models/bookTypes';
 interface SummaryBook {
   id: string;
   title: string;
-  author: string;
+  authors: string;
   coverUrl: string;
   publisher: string;
 }
@@ -14,7 +14,7 @@ export interface DetailBookType extends SummaryBook {
   isbn: string;
   publishedYear: number;
 }
-
+// records GET type
 export interface RecordListItem {
   id: string;
   rating: number;

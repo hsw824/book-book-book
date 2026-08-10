@@ -45,7 +45,7 @@ export async function GET() {
         select: {
           id: true,
           title: true,
-          author: true,
+          authors: true,
           coverUrl: true,
           publisher: true,
         },
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
           data: {
             isbn: bookInfo.isbn,
             title: bookInfo.title,
-            author: bookInfo.authors,
+            authors: bookInfo.authors,
             publisher: bookInfo.publisher,
             publishedYear,
             coverUrl: bookInfo.thumbnail,

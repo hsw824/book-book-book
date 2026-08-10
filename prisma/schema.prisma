@@ -39,7 +39,7 @@ model Book {
   id            String   @id @default(uuid())
   isbn          String
   title         String
-  author        String
+  authors        String
   publisher     String
   publishedYear Int?     @map("published_year")
   coverUrl      String?  @map("cover_url")

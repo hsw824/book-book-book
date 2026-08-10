@@ -13,7 +13,7 @@ export function EditRecordForm({ id }: { id: string }) {
   const toFormRecordData = (recordData: RecordType): BookRecordForm => {
     return {
       bookInfo: {
-        authors: recordData.book.author,
+        authors: recordData.book.authors,
         datetime: recordData.book.publishedYear,
         publisher: recordData.book.publisher,
         thumbnail: recordData.book.coverUrl,

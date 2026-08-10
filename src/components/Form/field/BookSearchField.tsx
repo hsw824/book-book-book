@@ -49,7 +49,7 @@ function SelectedBookContent({
         <span className="text-[15px] font-semibold">{value.title}</span>
         <span className="text-[12px]">{value.authors}</span>
         <span className="text-[12px]">
-          {value.publisher} · {new Date(value.datetime).getFullYear()}
+          {value.publisher} · {value.datetime}
         </span>
       </div>
       <button

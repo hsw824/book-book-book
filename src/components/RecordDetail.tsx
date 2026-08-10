@@ -63,7 +63,7 @@ function BookInfoArea({ recordData, handleOpen, id }: { recordData: RecordType; 
         />
         <div className="flex basis-[55%] flex-col justify-center gap-2">
           <h2 className="text-xl font-bold">{recordData.book.title}</h2>
-          <p className="text-[14px] text-gray-600">{recordData.book.author}</p>
+          <p className="text-[14px] text-gray-600">{recordData.book.authors}</p>
           <p className="text-[12px] text-zinc-400">{recordData.book.publisher}</p>
         </div>
         <div>
