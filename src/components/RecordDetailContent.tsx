@@ -2,7 +2,7 @@
 
 import { GENRE_MAP } from '@/constants/genre';
 import { RATINGS } from '@/constants/rate';
-import { QuoteType, RecordType } from '@/models/recordTypes';
+import { Quote, RecordDetail } from '@/models/recordTypes';
 import { recordQueryOption } from '@/queries/recordQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { ROUTE } from '@/constants/path';
 
-export function RecordDetail({ id }: { id: string }) {
+export function RecordDetailContent({ id }: { id: string }) {
   const { data: recordData } = useSuspenseQuery(recordQueryOption.record(id));
   const { mutateAsync: deleteMutationAsync, isPending } = useDeleteRecordMutation();
   const [open, setOpen] = useState<boolean>(false);
@@ -48,7 +48,15 @@ export function RecordDetail({ id }: { id: string }) {
   );
 }
 
-function BookInfoArea({ recordData, handleOpen, id }: { recordData: RecordType; handleOpen: () => void; id: string }) {
+function BookInfoArea({
+  recordData,
+  handleOpen,
+  id,
+}: {
+  recordData: RecordDetail;
+  handleOpen: () => void;
+  id: string;
+}) {
   const router = useRouter();
 
   return (
@@ -157,7 +165,7 @@ function BookReview({ review }: { review: string }) {
   );
 }
 
-function BookQuotes({ quotes }: { quotes: QuoteType[] }) {
+function BookQuotes({ quotes }: { quotes: Quote[] }) {
   if (quotes.length === 0) {
     return (
       <div className="mt-7 mb-3 rounded-xl border border-dotted border-zinc-200 py-5 text-center">

@@ -1,5 +1,5 @@
 import { ErrorSection } from '@/components/error/ErrorSection';
-import { RecordDetail } from '@/components/RecordDetail';
+import { RecordDetailContent } from '@/components/RecordDetailContent';
 import { RecordDetailSkeleton } from '@/components/skeleton/RecordDetailSkeleton';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -21,7 +21,7 @@ export default async function DetailPage({ params }: { params: Promise<{ id: str
       }
     >
       <Suspense fallback={<RecordDetailSkeleton />}>
-        <RecordDetail id={id} />
+        <RecordDetailContent id={id} />
       </Suspense>
     </ErrorBoundary>
   );
