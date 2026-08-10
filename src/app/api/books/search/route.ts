@@ -1,4 +1,4 @@
-import { KakaoBookResponese } from '@/models/bookTypes';
+import { KakaoBookResponse, BookSummary } from '@/models/bookTypes';
 
 export async function GET(request: Request) {
   const query = new URL(request.url).searchParams.get('query');
@@ -11,13 +11,13 @@ export async function GET(request: Request) {
     headers: { Authorization: `KakaoAK ${process.env.KAKAO_REST_API_KEY}` },
   });
 
-  const data: KakaoBookResponese = await response.json();
+  const data: KakaoBookResponse = await response.json();
 
-  const books = data.documents.map(book => ({
+  const books: BookSummary[] = data.documents.map(book => ({
     authors: book.authors.join(','),
-    datetime: new Date(book.datetime).getFullYear(),
+    publishedYear: new Date(book.datetime).getFullYear(),
     publisher: book.publisher,
-    thumbnail: book.thumbnail,
+    coverUrl: book.thumbnail,
     title: book.title,
     isbn: book.isbn,
   }));

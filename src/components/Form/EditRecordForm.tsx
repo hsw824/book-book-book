@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { recordQueryOption } from '@/queries/recordQuery';
-import { BookRecordForm, RecordType } from '@/models/recordTypes';
+import { BookRecordForm, RecordDetail } from '@/models/recordTypes';
 import { GENRE_MAP } from '@/constants/genre';
 import { Rating } from '@/constants/rate';
 import { format } from 'date-fns';
@@ -10,13 +10,13 @@ import { RecordForm } from './RecordForm';
 
 export function EditRecordForm({ id }: { id: string }) {
   const { data: recordData } = useSuspenseQuery(recordQueryOption.record(id));
-  const toFormRecordData = (recordData: RecordType): BookRecordForm => {
+  const toFormRecordData = (recordData: RecordDetail): BookRecordForm => {
     return {
       bookInfo: {
-        authors: recordData.book.author,
-        datetime: recordData.book.publishedYear,
+        authors: recordData.book.authors,
+        publishedYear: recordData.book.publishedYear,
         publisher: recordData.book.publisher,
-        thumbnail: recordData.book.coverUrl,
+        coverUrl: recordData.book.coverUrl,
         title: recordData.book.title,
         isbn: recordData.book.isbn,
       },

@@ -1,7 +1,7 @@
 import { BookRecordForm } from '@/models/recordTypes';
 import { Control, Controller, useFormState } from 'react-hook-form';
 import Image from 'next/image';
-import { SummaryBook } from '@/models/bookTypes';
+import { BookSummary } from '@/models/bookTypes';
 import { FormField } from '../FormField';
 import { AutoCompleteBook } from '@/components/autoComplete/AutoCompleteBook';
 
@@ -38,18 +38,18 @@ function SelectedBookContent({
   onChange,
   isEdit,
 }: {
-  value: SummaryBook;
+  value: BookSummary;
   onChange: (...event: null[]) => void;
   isEdit: boolean;
 }) {
   return (
     <div className="flex items-start gap-3.5 rounded-xl bg-zinc-200 px-4 py-3.5">
-      <Image src={value.thumbnail} alt="책 사진" width={46} height={64} className="rounded-[3px]" />
+      <Image src={value.coverUrl} alt="책 사진" width={46} height={64} className="rounded-[3px]" />
       <div className="items-between flex basis-[82%] flex-col">
         <span className="text-[15px] font-semibold">{value.title}</span>
         <span className="text-[12px]">{value.authors}</span>
         <span className="text-[12px]">
-          {value.publisher} · {new Date(value.datetime).getFullYear()}
+          {value.publisher} · {value.publishedYear}
         </span>
       </div>
       <button

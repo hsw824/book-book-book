@@ -1,6 +1,6 @@
 'use client';
 
-import { SimpleRecordType } from '@/models/recordTypes';
+import { RecordListItem } from '@/models/recordTypes';
 import { recordsQueryOption } from '@/queries/recordsQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -46,7 +46,7 @@ export function Dashboard() {
   return <DashboardContent records={records} />;
 }
 
-function DashboardContent({ records }: { records: SimpleRecordType[] }) {
+function DashboardContent({ records }: { records: RecordListItem[] }) {
   const router = useRouter();
 
   return (
@@ -63,7 +63,7 @@ function DashboardContent({ records }: { records: SimpleRecordType[] }) {
             <div className="flex basis-[70%] flex-col">
               <span className="text-[16px] font-semibold">{record.book.title}</span>
               <span className="text-[13px] text-gray-600">
-                {record.book.author} | {record.book.publisher}
+                {record.book.authors} | {record.book.publisher}
               </span>
               <p className="text-[12px] text-gray-600">{format(record.finishedAt, 'yyyy.MM.dd')}</p>
             </div>

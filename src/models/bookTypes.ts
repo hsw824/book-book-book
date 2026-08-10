@@ -1,4 +1,4 @@
-interface KaKaoBook {
+interface KakaoBook {
   authors: string[];
   contents: string;
   datetime: string;
@@ -13,8 +13,8 @@ interface KaKaoBook {
   url: string;
 }
 
-export interface KakaoBookResponese {
-  documents: KaKaoBook[];
+export interface KakaoBookResponse {
+  documents: KakaoBook[];
   meta: {
     is_end: boolean;
     pageable_count: number;
@@ -22,11 +22,24 @@ export interface KakaoBookResponese {
   };
 }
 
-export interface SummaryBook {
-  authors: string;
-  datetime: number;
-  publisher: string;
-  thumbnail: string;
+interface BookCore {
   title: string;
+  authors: string;
+  coverUrl: string;
+  publisher: string;
+}
+
+export interface BookSummary extends BookCore {
   isbn: string;
+  publishedYear: number;
+}
+
+export interface RecordBook extends BookCore {
+  id: string;
+  isbn: string;
+  publishedYear: number;
+}
+
+export interface BookListItem extends BookCore {
+  id: string;
 }
