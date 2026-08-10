@@ -67,13 +67,7 @@ function BookResultContent({
             className={`${isSelected ? 'bg-indigo-50 shadow-[inset_2px_0_0_var(--color-blue-600)]' : ''} border-t border-solid border-gray-100`}
           >
             <div onMouseDown={() => onChange(book)} className="flex cursor-pointer gap-3 px-4 py-3">
-              <Image
-                src={book.coverUrl || FallbackImage}
-                alt="책 사진"
-                width={46}
-                height={64}
-                className="rounded-[3px]"
-              />
+              <Image src={book.coverUrl || FallbackImage} alt="책 사진" width={46} height={67} />
               <div className="flex flex-col justify-start">
                 <span className="text-[15px] font-medium text-neutral-800">{book.title}</span>
                 <span className="mt-0.75 text-[13px]/[1.3] text-gray-600">{book.authors}</span>
