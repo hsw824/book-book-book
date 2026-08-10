@@ -14,6 +14,7 @@ import { useDeleteRecordMutation } from '@/hooks/useRecordMutation';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { ROUTE } from '@/constants/path';
+import FallbackImage from '../../public/default-book-cover.svg';
 
 export function RecordDetailContent({ id }: { id: string }) {
   const { data: recordData } = useSuspenseQuery(recordQueryOption.record(id));
@@ -66,7 +67,7 @@ function BookInfoArea({
           className="rounded-[20px] border border-zinc-200/50"
           width={100}
           height={100}
-          src={recordData.book.coverUrl}
+          src={recordData.book.coverUrl || FallbackImage}
           alt={recordData.book.coverUrl}
         />
         <div className="flex basis-[55%] flex-col justify-center gap-2">

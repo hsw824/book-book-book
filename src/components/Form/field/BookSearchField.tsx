@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { BookSummary } from '@/models/bookTypes';
 import { FormField } from '../FormField';
 import { AutoCompleteBook } from '@/components/autoComplete/AutoCompleteBook';
+import FallbackImage from '../../../../public/default-book-cover.svg';
 
 interface Props {
   control: Control<BookRecordForm>;
@@ -44,7 +45,7 @@ function SelectedBookContent({
 }) {
   return (
     <div className="flex items-start gap-3.5 rounded-xl bg-zinc-200 px-4 py-3.5">
-      <Image src={value.coverUrl} alt="책 사진" width={46} height={64} className="rounded-[3px]" />
+      <Image src={value.coverUrl || FallbackImage} alt="책 사진" width={46} height={64} className="rounded-[3px]" />
       <div className="items-between flex basis-[82%] flex-col">
         <span className="text-[15px] font-semibold">{value.title}</span>
         <span className="text-[12px]">{value.authors}</span>

@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import FallbackImage from '../../public/default-book-cover.svg';
 
 export function Dashboard() {
   const { data: records } = useSuspenseQuery(recordsQueryOption.records());
@@ -59,7 +60,7 @@ function DashboardContent({ records }: { records: RecordListItem[] }) {
             className="mb-3 flex w-100 translate-y-0 cursor-pointer gap-3 rounded-[20px] border border-solid border-zinc-300 bg-white px-5 py-3 transition-all duration-100 ease-in hover:-translate-y-0.5 hover:shadow-xl"
             onClick={() => router.push(`/records/${record.id}`)}
           >
-            <Image src={record.book.coverUrl} alt={record.book.title} width={46} height={64} />
+            <Image src={record.book.coverUrl || FallbackImage} alt={record.book.title} width={46} height={64} />
             <div className="flex basis-[70%] flex-col">
               <span className="text-[16px] font-semibold">{record.book.title}</span>
               <span className="text-[13px] text-gray-600">
