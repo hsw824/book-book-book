@@ -10,8 +10,8 @@ const requestSchema = z.object({
     title: z.string().min(1),
     authors: z.string(),
     publisher: z.string(),
-    datetime: z.number(),
-    thumbnail: z.string().optional(),
+    publishedYear: z.number(),
+    coverUrl: z.string().optional(),
   }),
   finishedAt: z.string(),
   review: z.string(),
@@ -77,7 +77,6 @@ export async function POST(req: NextRequest) {
   }
 
   const validQuotes = quotes.filter(q => q.text.trim().length > 0);
-  const publishedYear = new Date(bookInfo.datetime).getFullYear();
 
   try {
     const record = await prisma.$transaction(async tx => {
@@ -92,8 +91,8 @@ export async function POST(req: NextRequest) {
             title: bookInfo.title,
             authors: bookInfo.authors,
             publisher: bookInfo.publisher,
-            publishedYear,
-            coverUrl: bookInfo.thumbnail,
+            publishedYear: bookInfo.publishedYear,
+            coverUrl: bookInfo.coverUrl,
           },
         });
       }

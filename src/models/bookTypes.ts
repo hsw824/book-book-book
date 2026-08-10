@@ -26,7 +26,7 @@ export interface SummaryBook {
   authors: string;
   datetime: number;
   publisher: string;
-  thumbnail: string;
+  coverUrl: string;
   title: string;
   isbn: string;
 }

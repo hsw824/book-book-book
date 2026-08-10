@@ -14,9 +14,9 @@ export function EditRecordForm({ id }: { id: string }) {
     return {
       bookInfo: {
         authors: recordData.book.authors,
-        datetime: recordData.book.publishedYear,
+        publishedYear: recordData.book.publishedYear,
         publisher: recordData.book.publisher,
-        thumbnail: recordData.book.coverUrl,
+        coverUrl: recordData.book.coverUrl,
         title: recordData.book.title,
         isbn: recordData.book.isbn,
       },

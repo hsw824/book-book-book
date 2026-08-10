@@ -15,9 +15,9 @@ export async function GET(request: Request) {
 
   const books = data.documents.map(book => ({
     authors: book.authors.join(','),
-    datetime: new Date(book.datetime).getFullYear(),
+    publishedYear: new Date(book.datetime).getFullYear(),
     publisher: book.publisher,
-    thumbnail: book.thumbnail,
+    coverUrl: book.thumbnail,
     title: book.title,
     isbn: book.isbn,
   }));
