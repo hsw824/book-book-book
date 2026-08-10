@@ -1,53 +1,41 @@
 import { Genre } from '@/constants/genre';
 import { Rating } from '@/constants/rate';
-import { Book } from '@/models/bookTypes';
+import { BookSummary, RecordBook, BookListItem } from '@/models/bookTypes';
 
-interface SummaryBook {
-  id: string;
-  title: string;
-  authors: string;
-  coverUrl: string;
-  publisher: string;
-}
-
-export interface DetailBookType extends SummaryBook {
-  isbn: string;
-  publishedYear: number;
-}
-// records GET type
+// /api/records
 export interface RecordListItem {
   id: string;
   rating: number;
   category: string;
   isEbook: boolean;
   finishedAt: string;
-  book: SummaryBook;
+  book: BookListItem;
 }
 
-export interface Quote {
-  page: number;
-  text: string;
-}
-
+// /api/records POST, /api/records/[id] PUT
 export type BookRecordForm = {
-  bookInfo: Book | null;
+  bookInfo: BookSummary | null;
   finishedAt: string;
   review: string;
-  quotes: Quote[];
+  quotes: QuoteForm[];
   genre: Genre;
   rating: Rating | null;
   isEbook: boolean;
 };
 
-export interface QuoteType {
-  id: string;
-  recordId: string;
+export interface QuoteForm {
   page: number;
   text: string;
+}
+
+export interface Quote extends QuoteForm {
+  id: string;
+  recordId: string;
   order: number;
 }
 
-export interface RecordType {
+// /api/records/[id]
+export interface RecordDetail {
   id: string;
   userId: string;
   bookId: string;
@@ -58,6 +46,6 @@ export interface RecordType {
   finishedAt: string;
   createdAt: string;
   updatedAt: string;
-  book: DetailBookType;
-  quotes: QuoteType[];
+  book: RecordBook;
+  quotes: Quote[];
 }

@@ -1,13 +1,13 @@
-import { BookRecordForm, RecordType } from '@/models/recordTypes';
+import { RecordListItem, BookRecordForm, RecordDetail } from '@/models/recordTypes';
 
 import { http } from '@/utils/http';
 
 export const fetchRecords = () => {
-  return http.get<RecordType[]>('/api/records');
+  return http.get<RecordListItem[]>('/api/records');
 };
 
 export const fetchRecord = (id: string) => {
-  return http.get<RecordType>(`/api/records/${id}`);
+  return http.get<RecordDetail>(`/api/records/${id}`);
 };
 
 export const postRecord = async (data: BookRecordForm) => {

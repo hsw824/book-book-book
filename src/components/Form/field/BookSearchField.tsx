@@ -1,7 +1,7 @@
 import { BookRecordForm } from '@/models/recordTypes';
 import { Control, Controller, useFormState } from 'react-hook-form';
 import Image from 'next/image';
-import { SummaryBook } from '@/models/bookTypes';
+import { BookSummary } from '@/models/bookTypes';
 import { FormField } from '../FormField';
 import { AutoCompleteBook } from '@/components/autoComplete/AutoCompleteBook';
 
@@ -38,7 +38,7 @@ function SelectedBookContent({
   onChange,
   isEdit,
 }: {
-  value: SummaryBook;
+  value: BookSummary;
   onChange: (...event: null[]) => void;
   isEdit: boolean;
 }) {
@@ -49,7 +49,7 @@ function SelectedBookContent({
         <span className="text-[15px] font-semibold">{value.title}</span>
         <span className="text-[12px]">{value.authors}</span>
         <span className="text-[12px]">
-          {value.publisher} · {value.datetime}
+          {value.publisher} · {value.publishedYear}
         </span>
       </div>
       <button

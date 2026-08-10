@@ -1,4 +1,3 @@
-import { BookForm } from '@/components/Form';
 import { recordQueryOption } from '@/queries/recordQuery';
 import { recordsQueryOption } from '@/queries/recordsQuery';
 import { deleteRecord, postRecord, updateRecord } from '@/services/record';
@@ -30,7 +29,7 @@ export const useUpdateRecordMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: BookForm }) => updateRecord(id, data),
+    mutationFn: ({ id, data }: { id: string; data: BookRecordForm }) => updateRecord(id, data),
     onSuccess: (_data, variables) => {
       return queryClient.invalidateQueries({ queryKey: recordQueryOption.record(variables.id).queryKey });
     },

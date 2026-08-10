@@ -1,12 +1,12 @@
-import { SummaryBook } from '@/models/bookTypes';
+import { BookSummary } from '@/models/bookTypes';
 import Image from 'next/image';
 import { Glasses } from '../icons/Glasses';
 
 interface Props {
-  books: SummaryBook[] | undefined;
+  books: BookSummary[] | undefined;
   selectedIndex: null | number;
   keyword: string;
-  onChange: (book: SummaryBook) => void;
+  onChange: (book: BookSummary) => void;
 }
 
 export function AutoCompleteResult({ books, selectedIndex, keyword, onChange }: Props) {
@@ -51,9 +51,9 @@ function BookResultContent({
   selectedIndex,
   onChange,
 }: {
-  books: SummaryBook[];
+  books: BookSummary[];
   selectedIndex: null | number;
-  onChange: (book: SummaryBook) => void;
+  onChange: (book: BookSummary) => void;
 }) {
   return (
     <div className="absolute top-full right-0 left-0 z-20 mt-3.5 h-170 w-full origin-top animate-[dropSpring_0.34s_cubic-bezier(0.34,1.42,0.5,1)] overflow-y-scroll rounded-[10px] border border-[#e3e5e8] bg-white shadow-[0_14px_44px_rgba(20,24,32,0.12)]">
