@@ -34,7 +34,7 @@ export async function GET() {
 
   const records = await prisma.record.findMany({
     where: { userId },
-    orderBy: { finishedAt: 'desc' },
+    orderBy: { createdAt: 'desc' },
     select: {
       id: true,
       rating: true,
