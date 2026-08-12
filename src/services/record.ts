@@ -2,8 +2,10 @@ import { RecordListItem, BookRecordForm, RecordDetail } from '@/models/recordTyp
 
 import { http } from '@/utils/http';
 
-export const fetchRecords = () => {
-  return http.get<RecordListItem[]>('/api/records');
+export const fetchRecords = (nextCursor?: string) => {
+  return http.get<{ records: RecordListItem[]; nextCursor: string | null }>(
+    nextCursor ? `/api/records?cursor=${nextCursor}` : '/api/records'
+  );
 };
 
 export const fetchRecord = (id: string) => {
