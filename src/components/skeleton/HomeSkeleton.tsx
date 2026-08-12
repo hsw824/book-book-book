@@ -3,10 +3,10 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 const SKELETON_COUNT = 5;
 
-export function HomeSkeleton() {
+export function HomeSkeleton({ showTitle }: { showTitle: boolean }) {
   return (
-    <div className="relative h-full w-full overflow-scroll bg-stone-200 p-2">
-      <h1 className="mb-8 text-3xl font-bold">내 서재</h1>
+    <div className="h-full w-full overflow-scroll bg-stone-200 p-2">
+      {showTitle && <h1 className="mb-8 text-3xl font-bold">내 서재</h1>}
       <div className="flex flex-col items-center">
         {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
           <div

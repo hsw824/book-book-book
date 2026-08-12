@@ -20,7 +20,7 @@ export default function Home() {
         />
       }
     >
-      <Suspense fallback={<HomeSkeleton />}>
+      <Suspense fallback={<HomeSkeleton showTitle />}>
         <Dashboard />
       </Suspense>
     </ErrorBoundary>
