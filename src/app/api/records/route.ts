@@ -26,15 +26,24 @@ const requestSchema = z.object({
   isEbook: z.boolean(),
 });
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const userId = await getAuthenticatedUserId();
   if (!userId) {
     return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const cursor = searchParams.get('cursor');
+  const take = 10;
+
   const records = await prisma.record.findMany({
     where: { userId },
     orderBy: { createdAt: 'desc' },
+    take,
+    ...(cursor && {
+      cursor: { id: cursor },
+      skip: 1,
+    }),
     select: {
       id: true,
       rating: true,
@@ -53,7 +62,9 @@ export async function GET() {
     },
   });
 
-  return NextResponse.json(records);
+  const nextCursor = records.length === take ? records[records.length - 1].id : null;
+
+  return NextResponse.json({ records, nextCursor });
 }
 
 export async function POST(req: NextRequest) {
