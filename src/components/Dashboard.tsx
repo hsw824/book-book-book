@@ -2,15 +2,21 @@
 
 import { RecordListItem } from '@/models/recordTypes';
 import { recordsQueryOption } from '@/queries/recordsQuery';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { InfiniteData, useSuspenseInfiniteQuery, UseSuspenseInfiniteQueryResult } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import FallbackImage from '../../public/default-book-cover.svg';
+import { useRef } from 'react';
+import { HomeSkeleton } from './skeleton/HomeSkeleton';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 export function Dashboard() {
-  const { data: records } = useSuspenseQuery(recordsQueryOption.records());
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useSuspenseInfiniteQuery(
+    recordsQueryOption.records()
+  );
+  const records = data.pages.flatMap(page => page.records);
 
   if (records.length === 0) {
     return (
@@ -44,14 +50,47 @@ export function Dashboard() {
       </div>
     );
   }
-  return <DashboardContent records={records} />;
+  return (
+    <DashboardContent
+      records={records}
+      fetchNextPage={fetchNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      hasNextPage={hasNextPage}
+    />
+  );
 }
 
-function DashboardContent({ records }: { records: RecordListItem[] }) {
+function DashboardContent({
+  records,
+  fetchNextPage,
+  isFetchingNextPage,
+  hasNextPage,
+}: {
+  records: RecordListItem[];
+  fetchNextPage: UseSuspenseInfiniteQueryResult<
+    InfiniteData<{ records: RecordListItem[]; nextCursor: string | null }>
+  >['fetchNextPage'];
+  isFetchingNextPage: boolean;
+  hasNextPage: boolean;
+}) {
   const router = useRouter();
 
+  const divRef = useRef<null | HTMLDivElement>(null);
+  useIntersectionObserver(
+    divRef,
+    ([entry]) => {
+      if (!entry.isIntersecting) return;
+      if (isFetchingNextPage || !hasNextPage) return;
+
+      fetchNextPage();
+    },
+    {
+      rootMargin: '100px',
+    }
+  );
+
   return (
-    <div className="relative h-full w-full overflow-scroll bg-stone-200 p-2">
+    <div className="relative h-full w-full overflow-y-scroll bg-stone-200 p-2">
       <h1 className="mb-8 text-3xl font-bold">내 서재</h1>
       <div className="flex flex-col items-center">
         {records.map(record => (
@@ -73,6 +112,8 @@ function DashboardContent({ records }: { records: RecordListItem[] }) {
             </div>
           </div>
         ))}
+        <div className="h-1" ref={divRef} />
+        {isFetchingNextPage && <HomeSkeleton showTitle={false} />}
       </div>
       <Link
         className="fixed right-10 bottom-3 flex h-14 w-14 scale-100 items-center justify-center rounded-[50%] border bg-blue-600 text-3xl text-white transition-all duration-100 ease-in hover:scale-105"
