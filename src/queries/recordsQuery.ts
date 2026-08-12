@@ -1,10 +1,12 @@
 import { fetchRecords } from '@/services/record';
-import { queryOptions } from '@tanstack/react-query';
+import { infiniteQueryOptions } from '@tanstack/react-query';
 
 export const recordsQueryOption = {
   records: () =>
-    queryOptions({
+    infiniteQueryOptions({
       queryKey: ['records'],
-      queryFn: fetchRecords,
+      queryFn: ({ pageParam }) => fetchRecords(pageParam),
+      initialPageParam: undefined as string | undefined,
+      getNextPageParam: lastPageData => lastPageData.nextCursor,
     }),
 };
