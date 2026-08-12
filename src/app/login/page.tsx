@@ -6,7 +6,7 @@ export default function Login() {
   return (
     <div className="flex h-full w-full items-center justify-center bg-stone-200 px-4 py-8">
       <div className="w-max-[100%] flex h-160 max-h-[100vh-64px] w-97 flex-col items-center rounded-4xl bg-[#f2f1ee] px-8 pt-0 pb-9">
-        <header className="flex w-full flex-col items-center">
+        <header className="flex h-[90%] w-full flex-col items-center justify-center">
           <div className="my-10 flex h-15 w-15 items-center justify-center rounded-2xl bg-blue-800">
             <svg
               width="26"
@@ -23,8 +23,6 @@ export default function Login() {
             </svg>
           </div>
           <h1 className="text-[22px] font-bold">Book-Book-Book</h1>
-          <p className="text-[13px] text-zinc-400">나만의 독서 기록장</p>
-          <span className="my-35 text-[15px] text-gray-600">당신의 독서 기록을 한눈에</span>
         </header>
         <main className="mb-2 w-full">
           <button
