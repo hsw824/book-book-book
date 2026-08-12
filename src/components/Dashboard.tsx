@@ -11,6 +11,8 @@ import FallbackImage from '../../public/default-book-cover.svg';
 import { useRef } from 'react';
 import { HomeSkeleton } from './skeleton/HomeSkeleton';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { signOut } from 'next-auth/react';
+import { ROUTE } from '@/constants/path';
 
 export function Dashboard() {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useSuspenseInfiniteQuery(
@@ -21,7 +23,16 @@ export function Dashboard() {
   if (records.length === 0) {
     return (
       <div className="h-full w-full overflow-scroll bg-stone-200 p-2">
-        <h1 className="mb-8 text-3xl font-bold">내 서재</h1>
+        <header className="flex justify-between">
+          <h1 className="mb-8 text-3xl font-bold">내 서재</h1>
+          <button
+            type="button"
+            className="h-8 cursor-pointer rounded-lg border border-white bg-white px-2 text-[14px] font-semibold"
+            onClick={() => signOut({ redirectTo: ROUTE.LOGIN })}
+          >
+            로그아웃
+          </button>
+        </header>
         <div className="flex h-[80%] flex-col items-center justify-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-[50%] bg-blue-600/10">
             <svg
@@ -91,7 +102,16 @@ function DashboardContent({
 
   return (
     <div className="relative h-full w-full overflow-y-scroll bg-stone-200 p-2">
-      <h1 className="mb-8 text-3xl font-bold">내 서재</h1>
+      <header className="flex justify-between">
+        <h1 className="mb-8 text-3xl font-bold">내 서재</h1>
+        <button
+          type="button"
+          className="h-8 cursor-pointer rounded-lg border border-white bg-white px-2 text-[14px] font-semibold"
+          onClick={() => signOut({ redirectTo: ROUTE.LOGIN })}
+        >
+          로그아웃
+        </button>
+      </header>
       <div className="flex flex-col items-center">
         {records.map(record => (
           <div
