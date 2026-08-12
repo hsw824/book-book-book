@@ -13,6 +13,7 @@ import { HomeSkeleton } from './skeleton/HomeSkeleton';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { signOut } from 'next-auth/react';
 import { ROUTE } from '@/constants/path';
+import { SolidBook } from './icons/Book';
 
 export function Dashboard() {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useSuspenseInfiniteQuery(
@@ -35,19 +36,7 @@ export function Dashboard() {
         </header>
         <div className="flex h-[80%] flex-col items-center justify-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-[50%] bg-blue-600/10">
-            <svg
-              width="30"
-              height="30"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#2f6bdc"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
-            </svg>
+            <SolidBook width="30" height="30" strokeWidth="1.6" stroke="#2f6bdc" />
           </div>
           <h2 className="text-[16px] font-bold">아직 기록한 책이 없어요.</h2>
           <p className="text-[13px] text-gray-600">첫 책을 검색하고 감상을 남겨보세요.</p>

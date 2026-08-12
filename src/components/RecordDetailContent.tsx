@@ -15,6 +15,10 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { ROUTE } from '@/constants/path';
 import FallbackImage from '../../public/default-book-cover.svg';
+import { Star } from './icons/Star';
+import { Pencil } from './icons/Pencil';
+import { Garbage } from './icons/Garbage';
+import { Book } from './icons/Book';
 
 export function RecordDetailContent({ id }: { id: string }) {
   const { data: recordData } = useSuspenseQuery(recordQueryOption.record(id));
@@ -80,54 +84,23 @@ function BookInfoArea({
             className="mr-2 h-8.5 w-8.5 cursor-pointer rounded-[9px] border border-zinc-200 p-2"
             onClick={() => router.push(`/records/${id}/edit`)}
           >
-            <svg
-              width="17"
-              height="17"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 20h9"></path>
-              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
-            </svg>
+            <Pencil width="17" height="17" strokeWidth="2" />
           </button>
 
           <button className="h-8.5 w-8.5 cursor-pointer rounded-[9px] border border-zinc-200 p-2" onClick={handleOpen}>
-            <svg
-              width="17"
-              height="17"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M3 6h18"></path>
-              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
-              <line x1="10" y1="11" x2="10" y2="17"></line>
-              <line x1="14" y1="11" x2="14" y2="17"></line>
-            </svg>
+            <Garbage width="17" height="17" strokeWidth="2" />
           </button>
         </div>
       </div>
       <div className="flex items-center gap-10">
         <div className="flex w-22">
           {RATINGS.map(rate => (
-            <svg
+            <Star
               key={rate}
               width="26"
               height="26"
-              viewBox="0 0 24 24"
-              fill="currentColor"
               className={rate <= recordData.rating ? 'text-blue-600' : 'text-zinc-300'}
-            >
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
-            </svg>
+            />
           ))}
         </div>
 
@@ -138,18 +111,7 @@ function BookInfoArea({
         <span className="text-[13px] text-gray-600">{format(recordData.finishedAt, 'yyyy.MM.dd')} 완독</span>
 
         <p className="flex items-center">
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-          >
-            <rect x="4" y="2" width="16" height="20" rx="2"></rect>
-            <line x1="8" y1="6" x2="16" y2="6"></line>
-          </svg>
+          <Book width="12" height="12" strokeWidth="2.2" />
           <span className="ml-2 text-[12px] text-gray-600"> {recordData.isEbook ? 'ebook' : '종이책'}</span>
         </p>
       </div>
