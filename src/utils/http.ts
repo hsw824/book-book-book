@@ -1,6 +1,17 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 
-const axios = Axios.create();
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    return '';
+  }
+
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return 'http://localhost:3000';
+};
+
+const axios = Axios.create({ baseURL: getBaseUrl() });
 
 export const http = {
   get: async function get<Response = unknown>(url: string, option: AxiosRequestConfig = {}) {
