@@ -4,6 +4,8 @@ import { RecordDetailSkeleton } from '@/components/skeleton/RecordDetailSkeleton
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 

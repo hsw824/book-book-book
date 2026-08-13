@@ -1,10 +1,10 @@
-'use client';
-
 import { Dashboard } from '@/components/Dashboard';
 import { ErrorSection } from '@/components/error/ErrorSection';
 import { HomeSkeleton } from '@/components/skeleton/HomeSkeleton';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+
+export const dynamic = 'force-dynamic';
 
 export default function Home() {
   return (

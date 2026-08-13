@@ -4,6 +4,8 @@ import { EditRecordFormSkeleton } from '@/components/skeleton/EditRecordFormSkel
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
