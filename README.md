@@ -13,6 +13,20 @@ https://book-book-book-two.vercel.app/
 
 ```mermaid
 graph TD
+    FE["Frontend<br/>Next.js (App Router) · TanStack Query"]
+    Server["Server<br/>Next.js API Routes (BFF) · Auth.js"]
+    Infra["Infra<br/>Vercel · Supabase (PostgreSQL)"]
+
+    FE -->|"요청"| Server
+    Server -->|"응답"| FE
+    Server -->|"쿼리 · 인증"| Infra
+```
+
+<details>
+<summary>API/화면 상세 구조 보기</summary>
+
+```mermaid
+graph TD
     Supabase[("Supabase<br/>PostgreSQL + Prisma")]
     BFF["Next.js API Routes (BFF)<br/>서버에서 Supabase를 직접 호출"]
 
@@ -43,11 +57,13 @@ graph TD
     Auth -.->|"세션 확인 후 접근 허용<br/>(proxy.ts)"| Dashboard
 ```
 
+</details>
+
 ## 프로젝트 개요
 
 **book-book-book**은 완독한 책을 기록하고, 인상 깊었던 구절을 남기는 개인 독서 기록 앱입니다.
 
-Claude를 페어 프로그래밍 도구로 활용해 백엔드 구현과 UI 디자인을 만들었습니다. 그리고 저는 전체 설계 방향 결정하고 화면 구성 기획했습니다. 프론트엔드 개발을 진행하고 셀프 피드백과 리팩터링을 담당했습니다. 데이터 모델 설계(정규화 여부, 필드 소속 결정) 타입 경계 설계(외부 API 응답과 도메인 모델 분리) 캐싱 전략 같은 부분은 Claude와 같이 의견을 말하면서 여러 대안을 상정해 놓고 트레이드오프를 따져 결정하는 방식을 사용했습니다.
+Claude는 페어 프로그래밍 도구로 활용해 백엔드 구현과 UI 디자인을 담당하고 저는 전체 설계 방향 결정과 화면 구성 기획 프론트엔드 개발을 진행하고 셀프 피드백과 리팩터링을 담당했습니다. 데이터 모델 설계(정규화 여부, 필드 소속 결정) 타입 경계 설계(외부 API 응답과 도메인 모델 분리) 캐싱 전략 같은 부분에 대해 여러 대안을 상정해 놓고 트레이드오프를 따져 결정하는 방식으로 개발을 진행했습니다.
 
 **Tech Stack**: Next.js (App Router) · TypeScript · TanStack Query · Prisma · PostgreSQL (Supabase) · Auth.js · Tailwind CSS
 
@@ -65,9 +81,8 @@ Claude를 페어 프로그래밍 도구로 활용해 백엔드 구현과 UI 디�
 
 ### 기록 작성/수정 폼
 
-- 하나의 폼 컴포넌트로 생성/수정 모드를 모두 지원하되, 수정 시에는 책 정보(외부 API 원본)를 변경 불가능하게 제한
-- `react-hook-form` 기반으로 네이티브 입력 요소는 `register`, 커스텀 UI(별점, 장르 선택 등)는 `Controller`로 구분해 연결
-- 필사 구절은 `useFieldArray`로 배열 상태를 관리하고, 항목 추가/삭제 UI를 배열 소유 컴포넌트와 개별 항목 컴포넌트로 분리
+- `react-hook-form` 기반으로 네이티브 입력 요소는 `register`를 통한 비제어 방식을 사용했습니다. 그리고 커스텀 UI(별점, 책 선택 등)는 제어방식인 `Controller`로 구분해 연결을 관리했습니다.
+- 필사 구절은 `useFieldArray`를 통해 동적으로 폼을 관리
 
 ### 인증
 
