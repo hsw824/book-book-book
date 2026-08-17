@@ -39,7 +39,7 @@ export function RecordDetailContent({ id }: { id: string }) {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center bg-stone-200">
-      <div className="h-150 w-135 rounded-[20px] bg-white p-5">
+      <div className="h-150 w-105 overflow-y-scroll rounded-[20px] bg-white p-5 sm:w-135">
         <Link href={ROUTE.HOME} className="mb-2 cursor-pointer text-sm text-gray-600">
           &lt; 목록으로
         </Link>
@@ -79,7 +79,7 @@ function BookInfoArea({
           <p className="text-[14px] text-gray-600">{recordData.book.authors}</p>
           <p className="text-[12px] text-zinc-400">{recordData.book.publisher}</p>
         </div>
-        <div>
+        <div className="flex">
           <button
             className="mr-2 h-8.5 w-8.5 cursor-pointer rounded-[9px] border border-zinc-200 p-2"
             onClick={() => router.push(`/records/${id}/edit`)}
@@ -92,7 +92,7 @@ function BookInfoArea({
           </button>
         </div>
       </div>
-      <div className="flex items-center gap-10">
+      <div className="flex items-center gap-6 sm:gap-10">
         <div className="flex w-22">
           {RATINGS.map(rate => (
             <Star
@@ -139,10 +139,11 @@ function BookQuotes({ quotes }: { quotes: Quote[] }) {
   }
   return (
     <div>
+      <p className="mt-7 mb-3 text-[12px] font-semibold text-zinc-400">필사하고 싶은 구절</p>
+
       {quotes.map(quote => {
         return (
-          <div key={quote.id}>
-            <p className="mt-7 mb-3 text-[12px] font-semibold text-zinc-400">필사하고 싶은 구절</p>
+          <div key={quote.id} className="mb-4">
             <div className="border-l-2 border-zinc-200 pl-5">
               <p className="text-[15px] break-normal wrap-break-word italic">{quote.text}</p>
               <span className="text-[12px] text-zinc-400">p. {quote.page}</span>

@@ -76,7 +76,7 @@ export function RecordForm({ editFormData, mode, id }: Props) {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center bg-stone-200">
       <form
-        className="h-220 w-150 overflow-auto rounded-[18px] border border-solid border-zinc-200 bg-white px-10 py-5"
+        className="h-220 w-105 overflow-auto rounded-[18px] border border-solid border-zinc-200 bg-white px-10 py-5 sm:w-150"
         onSubmit={handleSubmit(onSubmit)}
       >
         <Link className="mb-2 cursor-pointer text-sm text-gray-600" href={moveToHref}>

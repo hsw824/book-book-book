@@ -55,7 +55,7 @@ function SelectedBookContent({
       </div>
       <button
         type="button"
-        className="cursor-pointer rounded-2xl bg-white px-3 py-1.5 text-[12px] text-gray-600 disabled:bg-zinc-200 disabled:text-zinc-200"
+        className="w-14 cursor-pointer rounded-2xl bg-white px-3 py-1.5 text-[12px] text-gray-600 disabled:bg-zinc-200 disabled:text-zinc-200 sm:w-12"
         onClick={() => onChange(null)}
         disabled={isEdit}
       >
