@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
@@ -19,7 +19,7 @@ const requestSchema = z.object({
     z.object({
       page: z.number(),
       text: z.string(),
-    })
+    }),
   ),
   genre: z.string(),
   rating: z.number().min(1).max(5),
@@ -87,10 +87,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `알 수 없는 장르입니다: ${genre}` }, { status: 400 });
   }
 
-  const validQuotes = quotes.filter(q => q.text.trim().length > 0);
+  const validQuotes = quotes.filter((q) => q.text.trim().length > 0);
 
   try {
-    const record = await prisma.$transaction(async tx => {
+    const record = await prisma.$transaction(async (tx) => {
       let book = await tx.book.findFirst({
         where: { isbn: bookInfo.isbn },
       });

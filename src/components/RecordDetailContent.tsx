@@ -2,7 +2,7 @@
 
 import { GENRE_MAP } from '@/constants/genre';
 import { RATINGS } from '@/constants/rate';
-import { Quote, RecordDetail } from '@/models/recordTypes';
+import { type Quote, type RecordDetail } from '@/models/recordTypes';
 import { recordQueryOption } from '@/queries/recordQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -94,7 +94,7 @@ function BookInfoArea({
       </div>
       <div className="flex items-center gap-6 sm:gap-10">
         <div className="flex w-22">
-          {RATINGS.map(rate => (
+          {RATINGS.map((rate) => (
             <Star
               key={rate}
               width="26"
@@ -141,7 +141,7 @@ function BookQuotes({ quotes }: { quotes: Quote[] }) {
     <div>
       <p className="mt-7 mb-3 text-[12px] font-semibold text-zinc-400">필사하고 싶은 구절</p>
 
-      {quotes.map(quote => {
+      {quotes.map((quote) => {
         return (
           <div key={quote.id} className="mb-4">
             <div className="border-l-2 border-zinc-200 pl-5">

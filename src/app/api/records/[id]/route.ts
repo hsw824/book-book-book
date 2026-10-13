@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
@@ -63,7 +63,7 @@ const updateSchema = z.object({
     z.object({
       page: z.number(),
       text: z.string(),
-    })
+    }),
   ),
   genre: z.string(),
   rating: z.number().min(1).max(5),
@@ -102,9 +102,9 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: `알 수 없는 장르입니다: ${genre}` }, { status: 400 });
   }
 
-  const validQuotes = quotes.filter(q => q.text.trim().length > 0);
+  const validQuotes = quotes.filter((q) => q.text.trim().length > 0);
 
-  const record = await prisma.$transaction(async tx => {
+  const record = await prisma.$transaction(async (tx) => {
     await tx.quote.deleteMany({ where: { recordId: id } });
 
     return tx.record.update({

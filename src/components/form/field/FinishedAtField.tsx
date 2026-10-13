@@ -1,6 +1,6 @@
-import { Control, UseFormRegisterReturn, useFormState } from 'react-hook-form';
+import { type Control, type UseFormRegisterReturn, useFormState } from 'react-hook-form';
 import { FormField } from '../FormField';
-import { BookRecordForm } from '@/models/recordTypes';
+import { type BookRecordForm } from '@/models/recordTypes';
 
 export function FinishedAtField({
   control,

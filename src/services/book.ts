@@ -1,4 +1,4 @@
-import { BookSummary } from '@/models/bookTypes';
+import { type BookSummary } from '@/models/bookTypes';
 import { http } from '@/utils/http';
 
 export const fetchBooks = (search: string, signal: AbortSignal) => {

@@ -2,9 +2,9 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { recordQueryOption } from '@/queries/recordQuery';
-import { BookRecordForm, RecordDetail } from '@/models/recordTypes';
+import { type BookRecordForm, type RecordDetail } from '@/models/recordTypes';
 import { GENRE_MAP } from '@/constants/genre';
-import { Rating } from '@/constants/rate';
+import { type Rating } from '@/constants/rate';
 import { format } from 'date-fns';
 import { RecordForm } from './RecordForm';
 

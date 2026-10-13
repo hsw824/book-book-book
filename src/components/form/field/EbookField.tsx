@@ -1,5 +1,5 @@
-import { BookRecordForm } from '@/models/recordTypes';
-import { Control, Controller } from 'react-hook-form';
+import { type BookRecordForm } from '@/models/recordTypes';
+import { type Control, Controller } from 'react-hook-form';
 import { Toggle } from '../../ui/Toggle';
 
 export function EbookField({ control }: { control: Control<BookRecordForm> }) {

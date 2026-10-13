@@ -1,8 +1,12 @@
 'use client';
 
-import { RecordListItem } from '@/models/recordTypes';
+import { type RecordListItem } from '@/models/recordTypes';
 import { recordsQueryOption } from '@/queries/recordsQuery';
-import { InfiniteData, useSuspenseInfiniteQuery, UseSuspenseInfiniteQueryResult } from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  useSuspenseInfiniteQuery,
+  type UseSuspenseInfiniteQueryResult,
+} from '@tanstack/react-query';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,9 +21,9 @@ import { SolidBook } from './icons/Book';
 
 export function Dashboard() {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useSuspenseInfiniteQuery(
-    recordsQueryOption.records()
+    recordsQueryOption.records(),
   );
-  const records = data.pages.flatMap(page => page.records);
+  const records = data.pages.flatMap((page) => page.records);
 
   if (records.length === 0) {
     return (
@@ -79,14 +83,18 @@ function DashboardContent({
   useIntersectionObserver(
     divRef,
     ([entry]) => {
-      if (!entry.isIntersecting) return;
-      if (isFetchingNextPage || !hasNextPage) return;
+      if (!entry.isIntersecting) {
+        return;
+      }
+      if (isFetchingNextPage || !hasNextPage) {
+        return;
+      }
 
       fetchNextPage();
     },
     {
       rootMargin: '100px',
-    }
+    },
   );
 
   return (
@@ -102,7 +110,7 @@ function DashboardContent({
         </button>
       </header>
       <div className="flex flex-col items-center">
-        {records.map(record => (
+        {records.map((record) => (
           <div
             key={record.id}
             className="mb-3 flex w-100 translate-y-0 cursor-pointer gap-3 rounded-[20px] border border-solid border-zinc-300 bg-white px-5 py-3 transition-all duration-100 ease-in hover:-translate-y-0.5 hover:shadow-xl"

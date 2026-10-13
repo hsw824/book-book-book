@@ -2,7 +2,7 @@ import { recordQueryOption } from '@/queries/recordQuery';
 import { recordsQueryOption } from '@/queries/recordsQuery';
 import { deleteRecord, postRecord, updateRecord } from '@/services/record';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { BookRecordForm } from '@/models/recordTypes';
+import { type BookRecordForm } from '@/models/recordTypes';
 
 export const useCreateRecordMutation = () => {
   const queryClient = useQueryClient();
