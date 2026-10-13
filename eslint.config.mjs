@@ -2,11 +2,13 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import tanstackQuery from '@tanstack/eslint-plugin-query';
+import prettierConfig from 'eslint-config-prettier';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   ...tanstackQuery.configs['flat/recommended'],
+  prettierConfig,
   {
     rules: {
       'array-callback-return': ['error', { checkForEach: true }],
@@ -27,6 +29,8 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    'src/generated/**',
+    'prima/**',
   ]),
 ]);
 
