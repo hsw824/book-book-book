@@ -1,8 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
 import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
+import { PrismaRecordRepository } from '@/domain/repositories/recordRepository';
+
+const recordRepository = new PrismaRecordRepository();
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -12,13 +14,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
   }
 
-  const record = await prisma.record.findUnique({
-    where: { id },
-    include: {
-      book: true,
-      quotes: { orderBy: { order: 'asc' } },
-    },
-  });
+  const record = await recordRepository.findDetailById(id);
 
   if (!record) {
     return NextResponse.json({ error: '존재하지 않는 기록입니다.' }, { status: 404 });
@@ -39,9 +35,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
   }
 
-  const record = await prisma.record.findUnique({
-    where: { id },
-  });
+  const record = await recordRepository.findById(id);
 
   if (!record) {
     return NextResponse.json({ error: '존재하지 않는 기록입니다.' }, { status: 404 });
@@ -51,7 +45,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     return NextResponse.json({ error: '삭제 권한이 없습니다.' }, { status: 403 });
   }
 
-  await prisma.record.delete({ where: { id } });
+  await recordRepository.deleteById(id);
 
   return NextResponse.json({ success: true }, { status: 200 });
 }
@@ -85,7 +79,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: '잘못된 요청입니다.', details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const existing = await prisma.record.findUnique({ where: { id } });
+  const existing = await recordRepository.findById(id);
 
   if (!existing) {
     return NextResponse.json({ error: '존재하지 않는 기록입니다.' }, { status: 404 });
@@ -104,23 +98,13 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const validQuotes = quotes.filter((q) => q.text.trim().length > 0);
 
-  const record = await prisma.$transaction(async (tx) => {
-    await tx.quote.deleteMany({ where: { recordId: id } });
-
-    return tx.record.update({
-      where: { id },
-      data: {
-        category: genreEnum,
-        rating,
-        review,
-        isEbook,
-        finishedAt: new Date(finishedAt),
-        quotes: {
-          create: validQuotes.map((q, index) => ({ page: q.page, text: q.text, order: index })),
-        },
-      },
-      include: { quotes: true, book: true },
-    });
+  const record = await recordRepository.update(id, {
+    category: genreEnum,
+    rating,
+    review,
+    isEbook,
+    finishedAt: new Date(finishedAt),
+    quotes: validQuotes,
   });
 
   return NextResponse.json(record);
