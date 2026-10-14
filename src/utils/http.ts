@@ -11,7 +11,7 @@ const getBaseUrl = () => {
   return 'http://localhost:3000';
 };
 
-const axios = Axios.create({ baseURL: getBaseUrl() });
+const axios = Axios.create({ baseURL: getBaseUrl(), timeout: 3_000 });
 
 export const http = {
   get: async function get<Response = unknown>(url: string, option: AxiosRequestConfig = {}) {
