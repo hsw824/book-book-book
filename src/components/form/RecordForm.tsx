@@ -4,7 +4,7 @@
 import { useForm } from 'react-hook-form';
 import { useCreateRecordMutation, useUpdateRecordMutation } from '@/hooks/useRecordMutation';
 import toast from 'react-hot-toast';
-import { BookRecordForm } from '@/models/recordTypes';
+import { type BookRecordForm } from '@/models/recordTypes';
 import { SectionTitle } from './SectionTitle';
 import { BookSearchField } from './field/BookSearchField';
 import { RatingField } from './field/RatingField';
@@ -62,7 +62,9 @@ export function RecordForm({ editFormData, mode, id }: Props) {
       return;
     }
     try {
-      if (!id) throw new Error('잘못된 접근입니다.');
+      if (!id) {
+        throw new Error('잘못된 접근입니다.');
+      }
       await editRecordMutateAsync({ id, data });
       toast.success('수정이 완료되었어요!');
       router.push(`/records/${id}`);

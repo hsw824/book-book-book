@@ -7,6 +7,6 @@ export const recordsQueryOption = {
       queryKey: ['records'],
       queryFn: ({ pageParam }) => fetchRecords(pageParam),
       initialPageParam: undefined as string | undefined,
-      getNextPageParam: lastPageData => lastPageData.nextCursor,
+      getNextPageParam: (lastPageData) => lastPageData.nextCursor,
     }),
 };

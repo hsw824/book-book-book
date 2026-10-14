@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { BookSearchInput } from './AutoCompleteInput';
 import { AutoCompleteResult } from './AutoCompleteResult';
-import { BookSummary } from '@/models/bookTypes';
+import { type BookSummary } from '@/models/bookTypes';
 
 export function AutoCompleteBook({ onChange }: { onChange: (book: BookSummary) => void }) {
   const [keyword, setKeyword] = useState('');

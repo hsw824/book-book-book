@@ -1,8 +1,8 @@
-import { Control, Controller, useFormState } from 'react-hook-form';
+import { type Control, Controller, useFormState } from 'react-hook-form';
 import { FormField } from '../FormField';
 import { isNull } from 'es-toolkit';
-import { Rating, RATINGS } from '@/constants/rate';
-import { BookRecordForm } from '@/models/recordTypes';
+import { type Rating, RATINGS } from '@/constants/rate';
+import { type BookRecordForm } from '@/models/recordTypes';
 import { useState } from 'react';
 import { Star } from '../../icons/Star';
 
@@ -23,7 +23,7 @@ export function RatingField({ control }: { control: Control<BookRecordForm> }) {
 
           return (
             <div className="mb-2 flex items-center gap-1.5">
-              {RATINGS.map(rate => (
+              {RATINGS.map((rate) => (
                 <span
                   key={rate}
                   className={`cursor-pointer transition-all duration-200 ease-in ${!isNull(displayRating) && rate <= displayRating ? 'text-blue-600' : 'text-zinc-300'}`}

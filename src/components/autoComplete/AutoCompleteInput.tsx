@@ -20,15 +20,19 @@ export function BookSearchInput({ keyword, setKeyword, setSelectedIndex, bookCou
     // TODO: enter(form 적용)와 esc(검색창 제거) 처리
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setSelectedIndex(prev => {
-        if (isNull(prev) || prev === bookCount - 1) return 0;
+      setSelectedIndex((prev) => {
+        if (isNull(prev) || prev === bookCount - 1) {
+          return 0;
+        }
         return prev + 1;
       });
     }
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setSelectedIndex(prev => {
-        if (isNull(prev) || prev === 0) return bookCount - 1;
+      setSelectedIndex((prev) => {
+        if (isNull(prev) || prev === 0) {
+          return bookCount - 1;
+        }
         return prev - 1;
       });
     }

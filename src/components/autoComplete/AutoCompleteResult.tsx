@@ -1,4 +1,4 @@
-import { BookSummary } from '@/models/bookTypes';
+import { type BookSummary } from '@/models/bookTypes';
 import Image from 'next/image';
 import { Glasses } from '../icons/Glasses';
 import FallbackImage from '../../../public/default-book-cover.svg';

@@ -1,7 +1,7 @@
-import { BookRecordForm } from '@/models/recordTypes';
-import { Control, Controller, useFormState } from 'react-hook-form';
+import { type BookRecordForm } from '@/models/recordTypes';
+import { type Control, Controller, useFormState } from 'react-hook-form';
 import Image from 'next/image';
-import { BookSummary } from '@/models/bookTypes';
+import { type BookSummary } from '@/models/bookTypes';
 import { FormField } from '../FormField';
 import { AutoCompleteBook } from '@/components/autoComplete/AutoCompleteBook';
 import FallbackImage from '../../../../public/default-book-cover.svg';

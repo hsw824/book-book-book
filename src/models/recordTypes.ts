@@ -1,6 +1,6 @@
-import { Genre } from '@/constants/genre';
-import { Rating } from '@/constants/rate';
-import { BookSummary, RecordBook, BookListItem } from '@/models/bookTypes';
+import { type Genre } from '@/constants/genre';
+import { type Rating } from '@/constants/rate';
+import { type BookSummary, type RecordBook, type BookListItem } from '@/models/bookTypes';
 
 // /api/records
 export interface RecordListItem {

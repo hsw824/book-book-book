@@ -6,7 +6,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [Google],
   callbacks: {
     async signIn({ user }) {
-      if (!user.email) return false;
+      if (!user.email) {
+        return false;
+      }
 
       await prisma.user.upsert({
         where: { email: user.email },

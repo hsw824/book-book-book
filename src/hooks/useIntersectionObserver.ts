@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 export const useIntersectionObserver = (
   ref: React.RefObject<HTMLElement | null>,
   callback: IntersectionObserverCallback,
-  options?: IntersectionObserverInit
+  options?: IntersectionObserverInit,
 ) => {
   useEffect(() => {
     const observer = new IntersectionObserver(callback, options);

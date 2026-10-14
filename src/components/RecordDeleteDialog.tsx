@@ -15,7 +15,7 @@ export function RecordDeleteDialog({
     <Portal open={open} close={close}>
       <div
         className="flex h-40 w-85 flex-col justify-center rounded-xl bg-white px-3"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="my-5">
           <p className="text-[16px] font-bold">이 기록을 삭제할까요?</p>
