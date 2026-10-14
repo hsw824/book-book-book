@@ -1,6 +1,8 @@
 import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
-import { prisma } from '@/lib/prisma';
+import { UserRepository } from './domain/repositories/userRepository';
+
+const userRepository = new UserRepository();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [Google],
@@ -10,21 +12,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return false;
       }
 
-      await prisma.user.upsert({
-        where: { email: user.email },
-        update: {},
-        create: {
-          email: user.email,
-        },
-      });
+      await userRepository.insert(user.email);
 
       return true;
     },
     async jwt({ token }) {
       if (token.email) {
-        const dbUser = await prisma.user.findUnique({
-          where: { email: token.email },
-        });
+        const dbUser = await userRepository.findUser(token.email);
         if (dbUser) {
           token.userId = dbUser.id;
         }
