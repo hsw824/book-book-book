@@ -34,6 +34,19 @@ export interface Quote extends QuoteForm {
   order: number;
 }
 
+export interface RecordRow {
+  id: string;
+  userId: string;
+  bookId: string;
+  category: string;
+  rating: number;
+  review: string;
+  isEbook: boolean;
+  finishedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // /api/records/[id]
 export interface RecordDetail {
   id: string;

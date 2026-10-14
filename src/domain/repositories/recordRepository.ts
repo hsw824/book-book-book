@@ -1,19 +1,7 @@
 import { type Genre } from '@/generated/prisma';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
 import { prisma } from '@/lib/prisma';
-
-interface RecordBase {
-  id: string;
-  userId: string;
-  bookId: string;
-  category: string;
-  rating: number;
-  review: string;
-  isEbook: boolean;
-  finishedAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { type RecordRow, type Quote } from '@/models/recordTypes';
 
 interface Book {
   id: string;
@@ -21,20 +9,12 @@ interface Book {
   publishedYear: number | null;
 }
 
-interface Quote {
-  id: string;
-  recordId: string;
-  page: number;
-  text: string;
-  order: number;
-}
-
-interface RecordDetail extends RecordBase {
+interface RecordDetail extends RecordRow {
   book: Book;
   quotes: Quote[];
 }
 
-interface Input {
+interface UpdateData {
   finishedAt: Date;
   review: string;
   quotes: {
@@ -112,11 +92,11 @@ interface PostResponse {
 
 export interface RecordRepository {
   findListById(id: string, cursor: string | null, take: number): Promise<RecordList[]>;
-  findById(id: string): Promise<RecordBase | null>;
+  findById(id: string): Promise<RecordRow | null>;
   findDetailById(id: string): Promise<RecordDetail | null>;
   post(id: string, postData: PostData): Promise<PostResponse>;
-  deleteById(id: string): Promise<RecordBase>;
-  update(id: string, input: Input): Promise<RecordDetail>;
+  deleteById(id: string): Promise<RecordRow>;
+  update(id: string, updateData: UpdateData): Promise<RecordDetail>;
 }
 
 export class PrismaRecordRepository implements RecordRepository {
@@ -148,7 +128,7 @@ export class PrismaRecordRepository implements RecordRepository {
     });
   }
 
-  async findById(id: string): Promise<RecordBase | null> {
+  async findById(id: string): Promise<RecordRow | null> {
     return prisma.record.findUnique({
       where: { id },
     });
@@ -217,8 +197,8 @@ export class PrismaRecordRepository implements RecordRepository {
     });
   }
 
-  async update(id: string, input: Input): Promise<RecordDetail> {
-    const { quotes, ...fields } = input;
+  async update(id: string, updateData: UpdateData): Promise<RecordDetail> {
+    const { quotes, ...fields } = updateData;
 
     return prisma.$transaction(async (tx) => {
       await tx.quote.deleteMany({ where: { recordId: id } });
