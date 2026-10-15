@@ -16,7 +16,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async jwt({ token }) {
       if (token.email) {
-        const dbUser = await userRepository.findUser(token.email);
+        const dbUser = await userRepository.findByEmail(token.email);
         if (dbUser) {
           token.userId = dbUser.id;
         }

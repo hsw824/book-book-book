@@ -13,7 +13,7 @@ class UserRepository implements PrismaUserRepository {
     });
   }
 
-  async findUser(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<User | null> {
     return prisma.user.findUnique({
       where: { email },
     });
