@@ -1,16 +1,6 @@
 import { prisma } from '@/lib/prisma';
-
-interface User {
-  id: string;
-  email: string;
-  passwordHash: string | null;
-  createdAt: Date;
-}
-
-export interface PrismaUserRepository {
-  insert: (email: string) => void;
-  findUser(email: string): Promise<User | null>;
-}
+import { type PrismaUserRepository } from '../models/userRepositoryInterface';
+import { type User } from '../models/userTypes';
 
 class UserRepository implements PrismaUserRepository {
   async insert(email: string) {
