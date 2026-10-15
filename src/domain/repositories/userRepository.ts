@@ -12,7 +12,7 @@ export interface PrismaUserRepository {
   findUser(email: string): Promise<User | null>;
 }
 
-export class UserRepository implements PrismaUserRepository {
+class UserRepository implements PrismaUserRepository {
   async insert(email: string) {
     prisma.user.upsert({
       where: { email },
@@ -29,3 +29,5 @@ export class UserRepository implements PrismaUserRepository {
     });
   }
 }
+
+export const userRepository = new UserRepository();

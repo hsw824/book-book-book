@@ -1,8 +1,6 @@
 import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
-import { UserRepository } from './domain/repositories/userRepository';
-
-const userRepository = new UserRepository();
+import { userRepository } from './domain/repositories/userRepository';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [Google],
