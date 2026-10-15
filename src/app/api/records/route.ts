@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { prisma } from '@/lib/prisma';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
 import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
+import { recordRepository } from '@/domain/repositories/recordRepository';
 
 const requestSchema = z.object({
   bookInfo: z.object({
@@ -36,32 +36,7 @@ export async function GET(req: NextRequest) {
   const cursor = searchParams.get('cursor');
   const take = 10;
 
-  const records = await prisma.record.findMany({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-    take,
-    ...(cursor && {
-      cursor: { id: cursor },
-      skip: 1,
-    }),
-    select: {
-      id: true,
-      rating: true,
-      category: true,
-      isEbook: true,
-      finishedAt: true,
-      book: {
-        select: {
-          id: true,
-          title: true,
-          authors: true,
-          coverUrl: true,
-          publisher: true,
-        },
-      },
-    },
-  });
-
+  const records = await recordRepository.findListById(userId, cursor, take);
   const nextCursor = records.length === take ? records[records.length - 1].id : null;
 
   return NextResponse.json({ records, nextCursor });
@@ -80,54 +55,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: '잘못된 요청입니다.', details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const { bookInfo, finishedAt, review, quotes, genre, rating, isEbook } = parsed.data;
+  const { genre } = parsed.data;
 
   const genreEnum = GENRE_LABEL_TO_ENUM[genre];
   if (!genreEnum) {
     return NextResponse.json({ error: `알 수 없는 장르입니다: ${genre}` }, { status: 400 });
   }
 
-  const validQuotes = quotes.filter((q) => q.text.trim().length > 0);
-
   try {
-    const record = await prisma.$transaction(async (tx) => {
-      let book = await tx.book.findFirst({
-        where: { isbn: bookInfo.isbn },
-      });
-
-      if (!book) {
-        book = await tx.book.create({
-          data: {
-            isbn: bookInfo.isbn,
-            title: bookInfo.title,
-            authors: bookInfo.authors,
-            publisher: bookInfo.publisher,
-            publishedYear: bookInfo.publishedYear,
-            coverUrl: bookInfo.coverUrl,
-          },
-        });
-      }
-
-      return tx.record.create({
-        data: {
-          userId,
-          bookId: book.id,
-          category: genreEnum,
-          rating,
-          review,
-          isEbook,
-          finishedAt: new Date(finishedAt),
-          quotes: {
-            create: validQuotes.map((q, index) => ({
-              page: q.page,
-              text: q.text,
-              order: index,
-            })),
-          },
-        },
-        include: { quotes: true, book: true },
-      });
-    });
+    const record = await recordRepository.post(userId, parsed.data);
 
     return NextResponse.json(record, { status: 201 });
   } catch (error) {
