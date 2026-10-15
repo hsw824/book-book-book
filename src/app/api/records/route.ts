@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
 import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
-import { PrismaRecordRepository } from '@/domain/repositories/recordRepository';
+import { recordRepository } from '@/domain/repositories/recordRepository';
 
 const requestSchema = z.object({
   bookInfo: z.object({
@@ -25,8 +25,6 @@ const requestSchema = z.object({
   rating: z.number().min(1).max(5),
   isEbook: z.boolean(),
 });
-
-const recordRepository = new PrismaRecordRepository();
 
 export async function GET(req: NextRequest) {
   const userId = await getAuthenticatedUserId();

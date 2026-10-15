@@ -2,9 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import z from 'zod';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
 import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
-import { PrismaRecordRepository } from '@/domain/repositories/recordRepository';
-
-const recordRepository = new PrismaRecordRepository();
+import { recordRepository } from '@/domain/repositories/recordRepository';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

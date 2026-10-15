@@ -99,7 +99,7 @@ export interface RecordRepository {
   update(id: string, updateData: UpdateData): Promise<RecordDetail>;
 }
 
-export class PrismaRecordRepository implements RecordRepository {
+class PrismaRecordRepository implements RecordRepository {
   async findListById(id: string, cursor: string | null, take: number): Promise<RecordList[]> {
     return prisma.record.findMany({
       where: { userId: id },
@@ -219,3 +219,5 @@ export class PrismaRecordRepository implements RecordRepository {
     });
   }
 }
+
+export const recordRepository = new PrismaRecordRepository();
