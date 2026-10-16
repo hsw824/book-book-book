@@ -31,7 +31,8 @@ export const useUpdateRecordMutation = () => {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: BookRecordForm }) => updateRecord(id, data),
     onSuccess: (_data, variables) => {
-      return queryClient.invalidateQueries({ queryKey: recordQueryOption.record(variables.id).queryKey });
+      queryClient.invalidateQueries({ queryKey: recordQueryOption.record(variables.id).queryKey });
+      queryClient.invalidateQueries({ queryKey: recordsQueryOption.records().queryKey });
     },
   });
 };
