@@ -1,7 +1,8 @@
-import { type NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
-import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
+import { withAuth } from '@/lib/withAuth';
+import { parseRequestBody } from '@/lib/parseRequestBody';
 import { recordRepository } from '@/domain/repositories/recordRepository';
 
 const requestSchema = z.object({
@@ -26,12 +27,7 @@ const requestSchema = z.object({
   isEbook: z.boolean(),
 });
 
-export async function GET(req: NextRequest) {
-  const userId = await getAuthenticatedUserId();
-  if (!userId) {
-    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
-  }
-
+export const GET = withAuth(async (req, { userId }) => {
   const { searchParams } = new URL(req.url);
   const cursor = searchParams.get('cursor');
   const take = 10;
@@ -40,19 +36,12 @@ export async function GET(req: NextRequest) {
   const nextCursor = records.length === take ? records[records.length - 1].id : null;
 
   return NextResponse.json({ records, nextCursor });
-}
+});
 
-export async function POST(req: NextRequest) {
-  const userId = await getAuthenticatedUserId();
-  if (!userId) {
-    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
-  }
-
-  const body = await req.json();
-  const parsed = requestSchema.safeParse(body);
-
+export const POST = withAuth(async (req, { userId }) => {
+  const parsed = await parseRequestBody(req, requestSchema);
   if (!parsed.success) {
-    return NextResponse.json({ error: '잘못된 요청입니다.', details: parsed.error.flatten() }, { status: 400 });
+    return parsed.response;
   }
 
   const { genre } = parsed.data;
@@ -70,4 +59,4 @@ export async function POST(req: NextRequest) {
     console.error('Failed to create record:', error);
     return NextResponse.json({ error: '기록 저장에 실패했습니다.' }, { status: 500 });
   }
-}
+});
