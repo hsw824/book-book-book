@@ -1,4 +1,4 @@
-export const GENRES = [
+export const CATEGORIES = [
   '소설',
   '시·희곡',
   '에세이·산문',
@@ -13,9 +13,9 @@ export const GENRES = [
   '기타',
 ] as const;
 
-export type Genre = (typeof GENRES)[number];
+export type Category = (typeof CATEGORIES)[number];
 
-export const GENRE_MAP: Record<string, Genre> = {
+export const CATEGORY_MAP: Record<string, Category> = {
   NOVEL: '소설',
   POETRY_DRAMA: '시·희곡',
   ESSAY: '에세이·산문',

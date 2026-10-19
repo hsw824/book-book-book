@@ -1,6 +1,6 @@
 'use client';
 
-import { GENRE_MAP } from '@/constants/genre';
+import { CATEGORY_MAP } from '@/constants/category';
 import { RATINGS } from '@/constants/rate';
 import { type Quote, type RecordDetail } from '@/models/recordTypes';
 import { recordQueryOption } from '@/queries/recordQuery';
@@ -105,7 +105,7 @@ function BookInfoArea({
         </div>
 
         <span className="flex h-6 w-14 items-center justify-center rounded-2xl bg-blue-600/9 text-[12px] font-semibold text-blue-600">
-          {GENRE_MAP[recordData.category]}
+          {CATEGORY_MAP[recordData.category]}
         </span>
 
         <span className="text-[13px] text-gray-600">{format(recordData.finishedAt, 'yyyy.MM.dd')} 완독</span>

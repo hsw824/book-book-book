@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
-import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
+import { CATEGORY_LABEL_TO_ENUM } from '@/lib/category';
 import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -65,7 +65,7 @@ const updateSchema = z.object({
       text: z.string(),
     }),
   ),
-  genre: z.string(),
+  category: z.string(),
   rating: z.number().min(1).max(5),
   isEbook: z.boolean(),
 });
@@ -95,11 +95,11 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     return NextResponse.json({ error: '수정 권한이 없습니다.' }, { status: 403 });
   }
 
-  const { finishedAt, review, quotes, genre, rating, isEbook } = parsed.data;
+  const { finishedAt, review, quotes, category, rating, isEbook } = parsed.data;
 
-  const genreEnum = GENRE_LABEL_TO_ENUM[genre];
-  if (!genreEnum) {
-    return NextResponse.json({ error: `알 수 없는 장르입니다: ${genre}` }, { status: 400 });
+  const categoryEnum = CATEGORY_LABEL_TO_ENUM[category];
+  if (!categoryEnum) {
+    return NextResponse.json({ error: `알 수 없는 카테고리입니다: ${category}` }, { status: 400 });
   }
 
   const validQuotes = quotes.filter((q) => q.text.trim().length > 0);
@@ -110,7 +110,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     return tx.record.update({
       where: { id },
       data: {
-        category: genreEnum,
+        category: categoryEnum,
         rating,
         review,
         isEbook,

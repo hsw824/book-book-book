@@ -9,7 +9,7 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum Genre {
+enum Category {
   NOVEL
   POETRY_DRAMA
   ESSAY
@@ -55,7 +55,7 @@ model Record {
   userId     String   @map("user_id")
   bookId     String   @map("book_id")
 
-  category   Genre
+  category   Category
   rating     Int
   review     String   @db.Text
   isEbook    Boolean  @map("is_ebook")

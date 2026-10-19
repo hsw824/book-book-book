@@ -3,7 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { recordQueryOption } from '@/queries/recordQuery';
 import { type BookRecordForm, type RecordDetail } from '@/models/recordTypes';
-import { GENRE_MAP } from '@/constants/genre';
+import { CATEGORY_MAP } from '@/constants/category';
 import { type Rating } from '@/constants/rate';
 import { format } from 'date-fns';
 import { RecordForm } from './RecordForm';
@@ -23,7 +23,7 @@ export function EditRecordForm({ id }: { id: string }) {
       finishedAt: format(recordData.finishedAt, 'yyyy-MM-dd'),
       review: recordData.review,
       quotes: recordData.quotes,
-      genre: GENRE_MAP[recordData.category],
+      category: CATEGORY_MAP[recordData.category],
       rating: recordData.rating as Rating,
       isEbook: recordData.isEbook,
     };

@@ -8,7 +8,7 @@ import { type BookRecordForm } from '@/models/recordTypes';
 import { SectionTitle } from './SectionTitle';
 import { BookSearchField } from './field/BookSearchField';
 import { RatingField } from './field/RatingField';
-import { GenreField } from './field/GenreField';
+import { CategoryField } from './field/CategoryField';
 import { EbookField } from './field/EbookField';
 import { FinishedAtField } from './field/FinishedAtField';
 import { ReviewField } from './field/ReviewField';
@@ -29,7 +29,7 @@ const defaultEditFormData: BookRecordForm = {
   finishedAt: format(new Date(), 'yyyy-MM-dd'),
   review: '',
   quotes: [{ page: 0, text: '' }],
-  genre: '소설',
+  category: '소설',
   rating: null,
   isEbook: false,
 };
@@ -88,7 +88,7 @@ export function RecordForm({ editFormData, mode, id }: Props) {
         <BookSearchField control={control} isEdit={mode === 'edit'} />
         <hr className="my-6 h-3 w-full text-gray-100" />
         <SectionTitle title="기록 정보" />
-        <GenreField register={register('genre')} />
+        <CategoryField register={register('category')} />
         <FinishedAtField
           control={control}
           register={register('finishedAt', { required: '다 읽은 날짜를 입력해주세요.' })}
