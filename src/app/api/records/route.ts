@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
+import { type Genre } from '@/generated/prisma';
 import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
 
 const requestSchema = z.object({
@@ -26,6 +27,18 @@ const requestSchema = z.object({
   isEbook: z.boolean(),
 });
 
+function getCategories(searchParams: URLSearchParams): Genre[] {
+  const categories = searchParams.get('categories');
+  if (!categories) {
+    return [];
+  }
+
+  return categories
+    .split(',')
+    .map((label) => GENRE_LABEL_TO_ENUM[label])
+    .filter(Boolean);
+}
+
 export async function GET(req: NextRequest) {
   const userId = await getAuthenticatedUserId();
   if (!userId) {
@@ -34,12 +47,14 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const cursor = searchParams.get('cursor');
+  const categories = getCategories(searchParams);
   const take = 10;
 
   const records = await prisma.record.findMany({
-    where: { userId },
+    where: { userId, ...(categories.length > 0 && { category: { in: categories } }) },
     orderBy: { createdAt: 'desc' },
-    take,
+    // 다음 페이지 존재 여부를 확인하기 위해 1개 더 조회
+    take: take + 1,
     ...(cursor && {
       cursor: { id: cursor },
       skip: 1,
@@ -62,9 +77,11 @@ export async function GET(req: NextRequest) {
     },
   });
 
-  const nextCursor = records.length === take ? records[records.length - 1].id : null;
+  const hasNextPage = records.length > take;
+  const pageRecords = hasNextPage ? records.slice(0, take) : records;
+  const nextCursor = hasNextPage ? pageRecords[pageRecords.length - 1].id : null;
 
-  return NextResponse.json({ records, nextCursor });
+  return NextResponse.json({ records: pageRecords, nextCursor });
 }
 
 export async function POST(req: NextRequest) {
