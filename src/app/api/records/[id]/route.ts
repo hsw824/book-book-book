@@ -1,60 +1,36 @@
-import { type NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 import z from 'zod';
 import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
-import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
+import { withAuth } from '@/lib/withAuth';
+import { parseRequestBody } from '@/lib/parseRequestBody';
+import { checkRecordOwnership } from '@/lib/checkRecordOwnership';
+import { recordRepository } from '@/domain/repositories/recordRepository';
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+type Params = { id: string };
+
+export const GET = withAuth<Params>(async (req, { params, userId }) => {
   const { id } = await params;
 
-  const userId = await getAuthenticatedUserId();
-  if (!userId) {
-    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+  const ownership = checkRecordOwnership(await recordRepository.findDetailById(id), userId, '조회');
+  if (!ownership.success) {
+    return ownership.response;
   }
 
-  const record = await prisma.record.findUnique({
-    where: { id },
-    include: {
-      book: true,
-      quotes: { orderBy: { order: 'asc' } },
-    },
-  });
+  return NextResponse.json(ownership.record);
+});
 
-  if (!record) {
-    return NextResponse.json({ error: '존재하지 않는 기록입니다.' }, { status: 404 });
-  }
-
-  if (record.userId !== userId) {
-    return NextResponse.json({ error: '조회 권한이 없습니다.' }, { status: 403 });
-  }
-
-  return NextResponse.json(record);
-}
-
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const DELETE = withAuth<Params>(async (req, { params, userId }) => {
   const { id } = await params;
 
-  const userId = await getAuthenticatedUserId();
-  if (!userId) {
-    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+  const ownership = checkRecordOwnership(await recordRepository.findById(id), userId, '삭제');
+  if (!ownership.success) {
+    return ownership.response;
   }
 
-  const record = await prisma.record.findUnique({
-    where: { id },
-  });
-
-  if (!record) {
-    return NextResponse.json({ error: '존재하지 않는 기록입니다.' }, { status: 404 });
-  }
-
-  if (record.userId !== userId) {
-    return NextResponse.json({ error: '삭제 권한이 없습니다.' }, { status: 403 });
-  }
-
-  await prisma.record.delete({ where: { id } });
+  await recordRepository.deleteById(id);
 
   return NextResponse.json({ success: true }, { status: 200 });
-}
+});
 
 const updateSchema = z.object({
   finishedAt: z.string(),
@@ -70,29 +46,17 @@ const updateSchema = z.object({
   isEbook: z.boolean(),
 });
 
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const PUT = withAuth<Params>(async (req, { params, userId }) => {
   const { id } = await params;
 
-  const userId = await getAuthenticatedUserId();
-  if (!userId) {
-    return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
-  }
-
-  const body = await req.json();
-  const parsed = updateSchema.safeParse(body);
-
+  const parsed = await parseRequestBody(req, updateSchema);
   if (!parsed.success) {
-    return NextResponse.json({ error: '잘못된 요청입니다.', details: parsed.error.flatten() }, { status: 400 });
+    return parsed.response;
   }
 
-  const existing = await prisma.record.findUnique({ where: { id } });
-
-  if (!existing) {
-    return NextResponse.json({ error: '존재하지 않는 기록입니다.' }, { status: 404 });
-  }
-
-  if (existing.userId !== userId) {
-    return NextResponse.json({ error: '수정 권한이 없습니다.' }, { status: 403 });
+  const ownership = checkRecordOwnership(await recordRepository.findById(id), userId, '수정');
+  if (!ownership.success) {
+    return ownership.response;
   }
 
   const { finishedAt, review, quotes, genre, rating, isEbook } = parsed.data;
@@ -104,24 +68,14 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const validQuotes = quotes.filter((q) => q.text.trim().length > 0);
 
-  const record = await prisma.$transaction(async (tx) => {
-    await tx.quote.deleteMany({ where: { recordId: id } });
-
-    return tx.record.update({
-      where: { id },
-      data: {
-        category: genreEnum,
-        rating,
-        review,
-        isEbook,
-        finishedAt: new Date(finishedAt),
-        quotes: {
-          create: validQuotes.map((q, index) => ({ page: q.page, text: q.text, order: index })),
-        },
-      },
-      include: { quotes: true, book: true },
-    });
+  const record = await recordRepository.update(id, {
+    category: genreEnum,
+    rating,
+    review,
+    isEbook,
+    finishedAt: new Date(finishedAt),
+    quotes: validQuotes,
   });
 
   return NextResponse.json(record);
-}
+});
