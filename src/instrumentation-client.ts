@@ -26,7 +26,7 @@ Sentry.init({
     cookies: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
     urlQueryParams: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
   },
-  environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? 'dev',
+  environment: process.env.NEXT_PUBLIC_SENTRY_ENV ?? 'development',
   normalizeDepth: 6,
 });
 
