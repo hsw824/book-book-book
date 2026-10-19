@@ -1,4 +1,4 @@
-import { type Genre } from '@/constants/genre';
+import { type Category } from '@/constants/category';
 import { type Rating } from '@/constants/rate';
 import { type BookSummary, type RecordBook, type BookListItem } from '@/models/bookTypes';
 
@@ -18,7 +18,7 @@ export type BookRecordForm = {
   finishedAt: string;
   review: string;
   quotes: QuoteForm[];
-  genre: Genre;
+  category: Category;
   rating: Rating | null;
   isEbook: boolean;
 };
