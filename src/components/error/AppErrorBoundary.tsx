@@ -11,6 +11,7 @@ interface AppErrorBoundaryProps {
 
 export function AppErrorBoundary({ children }: AppErrorBoundaryProps) {
   const { reset } = useQueryErrorResetBoundary();
+
   return (
     <Sentry.ErrorBoundary
       onReset={reset}
