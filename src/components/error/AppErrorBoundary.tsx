@@ -19,7 +19,7 @@ export function AppErrorBoundary({ children }: AppErrorBoundaryProps) {
         <ErrorSection
           title="일시적인 오류가 발생했어요."
           description="다시 시도해 주세요."
-          buttonText="돌아가기"
+          buttonText="다시 시도하기"
           onClick={resetError}
         />
       )}
