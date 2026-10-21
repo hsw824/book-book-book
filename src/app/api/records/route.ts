@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
   });
 
   const hasNextPage = records.length > take;
-  const pageRecords = hasNextPage ? records.slice(0, take) : records;
+  const pageRecords = records.slice(0, take);
   const nextCursor = hasNextPage ? pageRecords[pageRecords.length - 1].id : null;
 
   return NextResponse.json({ records: pageRecords, nextCursor });
