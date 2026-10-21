@@ -1,11 +1,19 @@
 import { type RecordListItem, type BookRecordForm, type RecordDetail } from '@/models/recordTypes';
+import { type Category } from '@/constants/category';
 
 import { http } from '@/utils/http';
 
-export const fetchRecords = (nextCursor?: string) => {
-  return http.get<{ records: RecordListItem[]; nextCursor: string | null }>(
-    nextCursor ? `/api/records?cursor=${nextCursor}` : '/api/records',
-  );
+export const fetchRecords = ({ cursor, categories = [] }: { cursor?: string; categories?: Category[] } = {}) => {
+  return http.get<{ records: RecordListItem[]; nextCursor: string | null }>('/api/records', {
+    params: {
+      cursor,
+      categories: categories.length > 0 ? categories.join(',') : undefined,
+    },
+  });
+};
+
+export const fetchRecordCategories = () => {
+  return http.get<{ categories: Category[] }>('/api/records/categories');
 };
 
 export const fetchRecord = (id: string) => {
