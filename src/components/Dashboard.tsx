@@ -54,7 +54,7 @@ export function Dashboard() {
       <RecordList categories={selectedCategories} />
       <Link
         className="fixed right-10 bottom-3 flex h-14 w-14 scale-100 items-center justify-center rounded-[50%] border bg-blue-600 text-3xl text-white transition-all duration-100 ease-in hover:scale-105"
-        href="/records/new"
+        href={ROUTE.FORM}
       >
         +
       </Link>
