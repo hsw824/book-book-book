@@ -14,7 +14,7 @@ export function EditRecordFormSkeleton() {
 
         <p className="mb-4 font-semibold text-zinc-400">기록 정보</p>
 
-        <SkeletonFormField title="장르" isRequired>
+        <SkeletonFormField title="카테고리" isRequired>
           <Skeleton width="100%" height={41} />
         </SkeletonFormField>
 

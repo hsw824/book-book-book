@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
-import { GENRE_LABEL_TO_ENUM } from '@/lib/genre';
-import { type Genre } from '@/generated/prisma';
+import { CATEGORY_LABEL_TO_ENUM } from '@/lib/category';
 import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
+import { type Category } from '@/generated/prisma';
 
 const requestSchema = z.object({
   bookInfo: z.object({
@@ -22,12 +22,12 @@ const requestSchema = z.object({
       text: z.string(),
     }),
   ),
-  genre: z.string(),
+  category: z.string(),
   rating: z.number().min(1).max(5),
   isEbook: z.boolean(),
 });
 
-function getCategories(searchParams: URLSearchParams): Genre[] {
+function getCategories(searchParams: URLSearchParams): Category[] {
   const categories = searchParams.get('categories');
   if (!categories) {
     return [];
@@ -35,7 +35,7 @@ function getCategories(searchParams: URLSearchParams): Genre[] {
 
   return categories
     .split(',')
-    .map((label) => GENRE_LABEL_TO_ENUM[label])
+    .map((label) => CATEGORY_LABEL_TO_ENUM[label])
     .filter(Boolean);
 }
 
@@ -97,11 +97,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: '잘못된 요청입니다.', details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const { bookInfo, finishedAt, review, quotes, genre, rating, isEbook } = parsed.data;
+  const { bookInfo, finishedAt, review, quotes, category, rating, isEbook } = parsed.data;
 
-  const genreEnum = GENRE_LABEL_TO_ENUM[genre];
-  if (!genreEnum) {
-    return NextResponse.json({ error: `알 수 없는 장르입니다: ${genre}` }, { status: 400 });
+  const categoryEnum = CATEGORY_LABEL_TO_ENUM[category];
+  if (!categoryEnum) {
+    return NextResponse.json({ error: `알 수 없는 카테고리입니다: ${category}` }, { status: 400 });
   }
 
   const validQuotes = quotes.filter((q) => q.text.trim().length > 0);
@@ -129,7 +129,7 @@ export async function POST(req: NextRequest) {
         data: {
           userId,
           bookId: book.id,
-          category: genreEnum,
+          category: categoryEnum,
           rating,
           review,
           isEbook,
