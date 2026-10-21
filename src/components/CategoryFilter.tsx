@@ -6,7 +6,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 export function CategoryFilter({ value, onValueChange }: { value: Genre[]; onValueChange: (value: Genre[]) => void }) {
   const { data: categories } = useSuspenseQuery(recordsQueryOption.categories());
-  const isAll = value.length === 0;
+  const isAllSelected = value.length === 0;
 
   const toggle = (category: Genre) => {
     const next = value.includes(category)
@@ -18,12 +18,12 @@ export function CategoryFilter({ value, onValueChange }: { value: Genre[]; onVal
 
   return (
     <div className="mb-6 flex flex-wrap gap-2 border-b border-zinc-300 pb-5" role="group" aria-label="카테고리 필터">
-      <Chip label="전체" isActive={isAll} onClick={() => onValueChange([])} />
+      <Chip label="전체" isActive={isAllSelected} onClick={() => onValueChange([])} />
       {categories.map((category) => (
         <Chip
           key={category}
           label={category}
-          isActive={!isAll && value.includes(category)}
+          isActive={!isAllSelected && value.includes(category)}
           onClick={() => toggle(category)}
         />
       ))}
