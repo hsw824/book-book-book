@@ -1,14 +1,20 @@
 'use client';
 
-import { type Genre } from '@/constants/genre';
+import { type Category } from '@/constants/category';
 import { recordsQueryOption } from '@/queries/recordsQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-export function CategoryFilter({ value, onValueChange }: { value: Genre[]; onValueChange: (value: Genre[]) => void }) {
+export function CategoryFilter({
+  value,
+  onValueChange,
+}: {
+  value: Category[];
+  onValueChange: (value: Category[]) => void;
+}) {
   const { data: categories } = useSuspenseQuery(recordsQueryOption.categories());
   const isAllSelected = value.length === 0;
 
-  const toggle = (category: Genre) => {
+  const toggle = (category: Category) => {
     const next = value.includes(category)
       ? value.filter((item) => item !== category)
       : categories.filter((item) => item === category || value.includes(item));

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { GENRE_MAP } from '@/constants/genre';
+import { CATEGORY_MAP } from '@/constants/category';
 import { getAuthenticatedUserId } from '@/lib/getAuthenticatedUerId';
 
 export async function GET() {
@@ -15,7 +15,7 @@ export async function GET() {
     select: { category: true },
   });
 
-  const categories = records.map(({ category }) => GENRE_MAP[category]);
+  const categories = records.map(({ category }) => CATEGORY_MAP[category]);
 
   return NextResponse.json({ categories });
 }

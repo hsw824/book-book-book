@@ -12,12 +12,12 @@ import { HomeSkeleton } from './skeleton/HomeSkeleton';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { signOut } from 'next-auth/react';
 import { ROUTE } from '@/constants/path';
-import { type Genre } from '@/constants/genre';
+import { type Category } from '@/constants/category';
 import { SolidBook } from './icons/Book';
 import { CategoryFilter } from './CategoryFilter';
 
 export function Dashboard() {
-  const [selectedCategories, setSelectedCategories] = useState<Genre[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [, startTransition] = useTransition();
 
   // 카테고리 조회와 기록 목록 조회가 워터폴이 되지 않도록 미리 요청
@@ -78,7 +78,7 @@ function DashboardHeader() {
   );
 }
 
-function RecordList({ categories }: { categories: Genre[] }) {
+function RecordList({ categories }: { categories: Category[] }) {
   const router = useRouter();
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useSuspenseInfiniteQuery(
     recordsQueryOption.records(categories),
