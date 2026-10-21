@@ -4,26 +4,26 @@ import { type Genre } from '@/constants/genre';
 import { recordsQueryOption } from '@/queries/recordsQuery';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-export function CategoryFilter({ selected, onChange }: { selected: Genre[]; onChange: (selected: Genre[]) => void }) {
+export function CategoryFilter({ value, onValueChange }: { value: Genre[]; onValueChange: (value: Genre[]) => void }) {
   const { data: categories } = useSuspenseQuery(recordsQueryOption.categories());
-  const isAll = selected.length === 0;
+  const isAll = value.length === 0;
 
   const toggle = (category: Genre) => {
-    const next = selected.includes(category)
-      ? selected.filter((item) => item !== category)
-      : categories.filter((item) => item === category || selected.includes(item));
+    const next = value.includes(category)
+      ? value.filter((item) => item !== category)
+      : categories.filter((item) => item === category || value.includes(item));
 
-    onChange(next.length === categories.length ? [] : next);
+    onValueChange(next.length === categories.length ? [] : next);
   };
 
   return (
     <div className="mb-6 flex flex-wrap gap-2 border-b border-zinc-300 pb-5" role="group" aria-label="카테고리 필터">
-      <Chip label="전체" isActive={isAll} onClick={() => onChange([])} />
+      <Chip label="전체" isActive={isAll} onClick={() => onValueChange([])} />
       {categories.map((category) => (
         <Chip
           key={category}
           label={category}
-          isActive={!isAll && selected.includes(category)}
+          isActive={!isAll && value.includes(category)}
           onClick={() => toggle(category)}
         />
       ))}

@@ -49,8 +49,8 @@ export function Dashboard() {
     <div className="relative h-full w-full overflow-y-scroll bg-stone-200 p-2">
       <DashboardHeader />
       <CategoryFilter
-        selected={selectedCategories}
-        onChange={(next) => startTransition(() => setSelectedCategories(next))}
+        value={selectedCategories}
+        onValueChange={(next) => startTransition(() => setSelectedCategories(next))}
       />
       <RecordList categories={selectedCategories} />
       <Link
