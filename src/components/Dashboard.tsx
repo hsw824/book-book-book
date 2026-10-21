@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import FallbackImage from '../../public/default-book-cover.svg';
-import { useRef, useState, useTransition } from 'react';
+import { useRef, useState, startTransition } from 'react';
 import { HomeSkeleton } from './skeleton/HomeSkeleton';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { signOut } from 'next-auth/react';
@@ -18,7 +18,6 @@ import { CategoryFilter } from './CategoryFilter';
 
 export function Dashboard() {
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [, startTransition] = useTransition();
 
   // 카테고리 조회와 기록 목록 조회가 워터폴이 되지 않도록 미리 요청
   usePrefetchInfiniteQuery(recordsQueryOption.records(selectedCategories));
