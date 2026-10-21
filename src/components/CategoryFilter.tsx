@@ -12,24 +12,21 @@ export function CategoryFilter({
   onValueChange: (value: Category[]) => void;
 }) {
   const { data: categories } = useSuspenseQuery(recordsQueryOption.categories());
-  const isAllSelected = value.length === 0;
-
   const toggle = (category: Category) => {
     const next = value.includes(category)
       ? value.filter((item) => item !== category)
       : categories.filter((item) => item === category || value.includes(item));
 
-    onValueChange(next.length === categories.length ? [] : next);
+    onValueChange(next);
   };
 
   return (
     <div className="mb-6 flex flex-wrap gap-2 border-b border-zinc-300 pb-5" role="group" aria-label="카테고리 필터">
-      <Chip label="전체" isActive={isAllSelected} onClick={() => onValueChange([])} />
       {categories.map((category) => (
         <Chip
           key={category}
           label={category}
-          isActive={!isAllSelected && value.includes(category)}
+          isActive={value.includes(category)}
           onClick={() => toggle(category)}
         />
       ))}
