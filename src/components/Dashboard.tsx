@@ -77,10 +77,12 @@ function DashboardHeader() {
 
 function RecordList({ categories }: { categories: Category[] }) {
   const router = useRouter();
-  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useSuspenseInfiniteQuery(
-    recordsQueryOption.records(categories),
-  );
-  const records = data.pages.flatMap((page) => page.records);
+  const {
+    data: records,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useSuspenseInfiniteQuery(recordsQueryOption.records(categories));
 
   const divRef = useRef<null | HTMLDivElement>(null);
   useIntersectionObserver(

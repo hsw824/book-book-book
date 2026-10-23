@@ -10,6 +10,7 @@ export const recordsQueryOption = {
       queryFn: ({ pageParam }) => fetchRecords({ cursor: pageParam, categories }),
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPageData) => lastPageData.nextCursor,
+      select: (data) => data.pages.flatMap((page) => page.records),
     }),
   categories: () =>
     queryOptions({
