@@ -12,16 +12,15 @@ import { HomeSkeleton } from './skeleton/HomeSkeleton';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { signOut } from 'next-auth/react';
 import { ROUTE } from '@/constants/path';
-import { type Category } from '@/constants/category';
 import { SolidBook } from './icons/Book';
 import { CategoryFilter } from './CategoryFilter';
+import { type RecordFilter } from '@/models/recordTypes';
 
 export function Dashboard() {
-  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const deferredSelected = useDeferredValue(selectedCategories);
+  const [filter, setFilter] = useState<RecordFilter>({ categories: [] });
+  const deferredSelected = useDeferredValue(filter);
 
-  // 카테고리 조회와 기록 목록 조회가 워터폴이 되지 않도록 미리 요청
-  usePrefetchInfiniteQuery(recordsQueryOption.records(selectedCategories));
+  usePrefetchInfiniteQuery(recordsQueryOption.records(filter));
   const { data: categories } = useSuspenseQuery(recordsQueryOption.categories());
 
   if (categories.length === 0) {
@@ -48,8 +47,13 @@ export function Dashboard() {
   return (
     <div className="relative h-full w-full overflow-y-scroll bg-stone-200 p-2">
       <DashboardHeader />
-      <CategoryFilter value={selectedCategories} onValueChange={setSelectedCategories} />
-      <RecordList categories={deferredSelected} />
+      <CategoryFilter
+        value={filter.categories}
+        onValueChange={(categories) => {
+          setFilter((prev) => ({ ...prev, categories }));
+        }}
+      />
+      <RecordList filter={deferredSelected} />
       <Link
         className="fixed right-10 bottom-3 flex h-14 w-14 scale-100 items-center justify-center rounded-[50%] border bg-blue-600 text-3xl text-white transition-all duration-100 ease-in hover:scale-105"
         href={ROUTE.FORM}
@@ -75,14 +79,14 @@ function DashboardHeader() {
   );
 }
 
-function RecordList({ categories }: { categories: Category[] }) {
+function RecordList({ filter }: { filter: RecordFilter }) {
   const router = useRouter();
   const {
     data: records,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useSuspenseInfiniteQuery(recordsQueryOption.records(categories));
+  } = useSuspenseInfiniteQuery(recordsQueryOption.records(filter));
 
   const divRef = useRef<null | HTMLDivElement>(null);
   useIntersectionObserver(
