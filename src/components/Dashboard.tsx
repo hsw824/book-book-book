@@ -7,14 +7,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import FallbackImage from '../../public/default-book-cover.svg';
-import { useRef, useState, useDeferredValue } from 'react';
+import { useState, useDeferredValue } from 'react';
 import { HomeSkeleton } from './skeleton/HomeSkeleton';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { signOut } from 'next-auth/react';
 import { ROUTE } from '@/constants/path';
 import { SolidBook } from './icons/Book';
 import { CategoryFilter } from './CategoryFilter';
 import { type RecordFilter } from '@/models/recordTypes';
+import { ImpressionArea } from '@toss/impression-area';
 
 export function Dashboard() {
   const [filter, setFilter] = useState<RecordFilter>({ categories: [] });
@@ -88,24 +88,6 @@ function RecordList({ filter }: { filter: RecordFilter }) {
     hasNextPage,
   } = useSuspenseInfiniteQuery(recordsQueryOption.records(filter));
 
-  const divRef = useRef<null | HTMLDivElement>(null);
-  useIntersectionObserver(
-    divRef,
-    ([entry]) => {
-      if (!entry.isIntersecting) {
-        return;
-      }
-      if (isFetchingNextPage || !hasNextPage) {
-        return;
-      }
-
-      fetchNextPage();
-    },
-    {
-      rootMargin: '100px',
-    },
-  );
-
   return (
     <div className="flex flex-col items-center">
       {records.map((record) => (
@@ -127,7 +109,13 @@ function RecordList({ filter }: { filter: RecordFilter }) {
           </div>
         </div>
       ))}
-      <div className="h-1" ref={divRef} />
+      <ImpressionArea
+        onImpressionStart={() => {
+          if (!isFetchingNextPage && hasNextPage) {
+            fetchNextPage();
+          }
+        }}
+      />
       {isFetchingNextPage && <HomeSkeleton showTitle={false} />}
     </div>
   );
