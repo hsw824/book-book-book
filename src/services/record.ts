@@ -4,12 +4,17 @@ import { type Category } from '@/constants/category';
 import { http } from '@/utils/http';
 
 export const fetchRecords = ({ cursor, categories = [] }: { cursor?: string; categories?: Category[] } = {}) => {
-  return http.get<{ records: RecordListItem[]; nextCursor: string | null }>('/api/records', {
-    params: {
-      cursor,
-      categories: categories.length > 0 ? categories.join(',') : undefined,
-    },
-  });
+  const params = new URLSearchParams();
+
+  if (cursor) {
+    params.set('cursor', cursor);
+  }
+
+  if (categories.length > 0) {
+    params.set('categories', categories.join());
+  }
+
+  return http.get<{ records: RecordListItem[]; nextCursor: string | null }>('/api/records', { params });
 };
 
 export const fetchRecord = (id: string) => {
