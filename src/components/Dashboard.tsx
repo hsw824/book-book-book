@@ -123,7 +123,7 @@ function RecordList({ filter }: { filter: RecordFilter }) {
             <p className="text-[12px] text-gray-600">{format(record.finishedAt, 'yyyy.MM.dd')}</p>
           </div>
           <div className="flex h-5 w-14 items-center justify-center rounded-2xl bg-blue-600/9 px-2.25 py-0.75 text-[12px] font-semibold text-blue-600">
-            ★ {record.rating}.0
+            ★ {record.rating.toFixed(1)}
           </div>
         </div>
       ))}
