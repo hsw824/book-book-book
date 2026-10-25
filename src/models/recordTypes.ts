@@ -49,3 +49,7 @@ export interface RecordDetail {
   book: RecordBook;
   quotes: Quote[];
 }
+
+export interface RecordFilter {
+  categories: Category[];
+}
