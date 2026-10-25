@@ -12,10 +12,6 @@ export const fetchRecords = ({ cursor, categories = [] }: { cursor?: string; cat
   });
 };
 
-export const fetchRecordCategories = () => {
-  return http.get<{ categories: Category[] }>('/api/records/categories');
-};
-
 export const fetchRecord = (id: string) => {
   return http.get<RecordDetail>(`/api/records/${id}`);
 };
@@ -30,4 +26,8 @@ export const deleteRecord = async (id: string) => {
 
 export const updateRecord = async (id: string, data: BookRecordForm) => {
   return http.put(`/api/records/${id}`, data);
+};
+
+export const fetchRecordCategories = () => {
+  return http.get<{ categories: Category[] }>('/api/records/categories');
 };
